@@ -25,6 +25,7 @@ mongoose.connection.on('error',(err)=>{
 const app = express();
 const users = require('./routes/users');
 const devices = require('./routes/devices');
+const loginlogs = require('./routes/loginlogs');
 
 //port number
 const port = config.port;
@@ -40,6 +41,7 @@ app.use(express.static(path.join(__dirname,'public')));
 app.use(bodyParser.json());
 app.use('/users',users);
 app.use('/devices',devices);
+app.use('/loginlog',loginlogs);
 
 //Passport Middleware
 app.use(passport.initialize());
