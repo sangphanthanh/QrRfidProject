@@ -26,7 +26,7 @@ module.exports.getUserByUsername = function(username,callback){
 
 //AddUser
 module.exports.addUser = function(newUser, callback){
-    bcrypt.genSalt(10,(err,salt)=>{
+    bcrypt.genSalt(config.roundSalt,(err,salt)=>{
         bcrypt.hash(newUser.password, salt, (err, hash)=>{
             if(err) throw err;
             newUser.password = hash;
@@ -40,7 +40,6 @@ module.exports.comparePassword = function(candidatePassword,hash,callback){
 //    console.log('CanPassword '+ candidatePassword);
 //    console.log('Hash ' + hash);
     bcrypt.compare(candidatePassword,hash,(err, isMatch)=>{
-        console.log('Err '+ err);
         if(err) throw err;
         callback(null, isMatch);
     });

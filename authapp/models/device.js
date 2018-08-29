@@ -15,3 +15,8 @@ const DeviceSchema = mongoose.Schema({
 });
 
 const Device = module.exports = mongoose.model('device',DeviceSchema);
+
+//Add new Device
+module.exports.addDevice = function(newDevice, callback){
+    newDevice.save(callback);
+}

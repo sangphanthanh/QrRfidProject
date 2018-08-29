@@ -35,28 +35,6 @@ module.exports = function(passport){
             done(null, false);
         }
     });
-}));
-
-//     var opts = {};
-//     opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');
-//     // opts.jwtFromRequest = ExtractJwt.fromHeader('authorization');
-//     opts.secretOrKey = 'AuthenticationTokenKey';
-
-//     // var strategy = new JwtStrategy(opts, function(jwt_payload,next){
-//     //     console.log('payload: ',jwt_payload);
-//     // });
-//     passport.use(new JwtStrategy(opts, (jwt_payload, done)=>{
-//         console.log('Payload  ' + jwt_payload._doc._id);
-//         User.getUserById(jwt_payload._doc._id, (err, User) => {
-//             if(err){
-//                 return done(err, false);
-//             }
-//             if(user){
-//                 return done(null, user);
-//             }else{
-//                 return done(null, false);
-//             }
-//         })
-//     }));
- }
+    }));
+}
 
