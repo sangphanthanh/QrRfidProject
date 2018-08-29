@@ -20,3 +20,10 @@ const Device = module.exports = mongoose.model('device',DeviceSchema);
 module.exports.addDevice = function(newDevice, callback){
     newDevice.save(callback);
 }
+
+//Get Device by UserID
+module.exports.getDeviceByUserID = function(UserID,callback){
+    console.log('UserID: '+UserID);
+    const query = {UserID:UserID}
+    Device.findOne(query,callback);
+}

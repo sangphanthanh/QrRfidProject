@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 const Device = require('../models/device');
 
 router.post('/addDevice',(req,res,next)=>{
@@ -24,5 +25,16 @@ router.post('/addDevice',(req,res,next)=>{
         }
     });
 });
-
+//GetListDevice
+router.get('/listDevice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
+    console.log(req.user);
+    Device.getDeviceByUserID(req.user._id,(err,device)=>{
+        if(err) throw err;
+		if(!device){
+			return res.json({success: false, msg: 'Device not found'});
+        }else{
+            res.json({device});
+        }
+    });
+});
 module.exports = router;
