@@ -8,14 +8,14 @@ const config = require('../config/config');
 //Register
 router.post('/register',(req,res,next)=>{
 	let newUser = new User({
-		name: req.body.name,
-		email: req.body.email,
 		username: req.body.username,
-		password: req.body.password	
+		password: req.body.password,
+		IsAdmin:  req.body.isAdmin,
+		RifdUID:  req.body.RifdUID
 	});
 	User.addUser(newUser,(err,user)=>{
 	if(err){
-		res.json({success: false, msg: 'Fail to register'});	
+		res.json({success: false, msg: 'Fail to register'+ err});	
 	}else{
 		res.json({success: true, msg: 'User registered'});
 	}
@@ -32,6 +32,7 @@ router.post('/authenticate',(req,res,next)=>{
 		if(!user){
 			return res.json({success: false, msg: 'User not found'});
 		}
+		console.log('Pass: '+password + ' = hash: ' + user.password);
 		User.comparePassword(password, user.password, (err, isMatch)=>{
 			if(err) throw err;
 			if(isMatch){
@@ -43,9 +44,8 @@ router.post('/authenticate',(req,res,next)=>{
 					token: "JWT " + token,
 					user:{
 						id: user._id,
-						name: user.name,
 						username: user.username,
-						email: user.email
+						RifdUID: user.RifdUID
 					}
 				});
 			}else{

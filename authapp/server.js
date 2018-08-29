@@ -23,9 +23,9 @@ mongoose.connection.on('error',(err)=>{
 
 const app = express();
 const users = require('./routes/users');
+const devices = require('./routes/devices');
 
 //port number
-
 const port = config.port;
 
 //cors middleware
@@ -38,6 +38,7 @@ app.use(express.static(path.join(__dirname,'public')));
 //Body Parser Middleware
 app.use(bodyParser.json());
 app.use('/users',users);
+app.use('/devices',devices);
 
 //Passport Middleware
 app.use(passport.initialize());

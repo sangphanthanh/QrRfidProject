@@ -5,21 +5,10 @@ const config = require('../config/config');
 
 //UserSchema
 const UserSchema = mongoose.Schema({
-    name:{
-        type: String
-    },
-    email:{
-        type: String,
-        require: true
-    },
-    username:{
-        type: String,
-        require: true
-    },
-    password:{
-        type: String,
-        require: true
-    },
+    username:   {   type: String,   require: true },
+    password:   {   type: String,   require: true },
+    IsAdmin:    {   type: Boolean,  require: true },
+    RifdUID:    {   type: String,   require: true},
 });
 
 const User = module.exports = mongoose.model('User',UserSchema);
@@ -51,6 +40,7 @@ module.exports.comparePassword = function(candidatePassword,hash,callback){
 //    console.log('CanPassword '+ candidatePassword);
 //    console.log('Hash ' + hash);
     bcrypt.compare(candidatePassword,hash,(err, isMatch)=>{
+        console.log('Err '+ err);
         if(err) throw err;
         callback(null, isMatch);
     });

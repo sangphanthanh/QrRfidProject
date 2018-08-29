@@ -1,0 +1,28 @@
+type Device struct {
+	ID               bson.ObjectId   json:"id" bson:"_id,omitempty"
+	MAC              string          json:"mac" bson:"mac"
+	ChipSerial       string          json:"chipSerial" bson:"chipSerial"
+	IsActive         bool            json:"isActive" bson:"isActive"
+	QRString         string          json:"qrString" bson:"qrString"
+	ClockID          int             json:"clockID" bson:"clockID"
+	ClockStatus      bool            json:"clockStatus" bson:"clockStatus"
+	ClockDescription string          json:"clockDescription" bson:"clockDescription"
+	DoorID           int             json:"doorID" bson:"doorID"
+	DoorStatus       bool            json:"doorStatus" bson:"doorStatus"
+	DoorDescription  string          json:"doorDescription" bson:"doorDescription"
+	UserID           []bson.ObjectId json:"userID" bson:"userID"
+}
+//User hold data of user
+type User struct {
+	ID       bson.ObjectId json:"userID" bson:"userID"
+	Username string        json:"userName" bson:"userName"
+	Password string        json:"password" bson:"password"
+	IsAdmin  bool          json:"isAdmin" bson:"isAdmin"
+	RifdUID  string        json:"rifdUID" bson:"rifUID"
+}
+type LoginLog struct {
+	ID         bson.ObjectId json:"id" bson:"id"
+	DoorStatus bool          json:"doorStatus" bson:"doorStatus"
+	Creator    bson.ObjectId json:"creator" bson:"creator"
+	Timestamp  time.Time     json:"timestamp" bson:"timestamp"
+}
