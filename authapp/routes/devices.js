@@ -64,7 +64,7 @@ router.get('/clockstatus/:MACAdd',(req,res,next)=>{
     });
 });
 //getDoorStatus base on MAC
-router.get('/clockstatus/:MACAdd',(req,res,next)=>{
+router.get('/doorstatus/:MACAdd',(req,res,next)=>{
     Device.getDeviceByMac(req.params.MACAdd,(err,device)=>{
         if(err) throw err;
 		if(!device){
@@ -91,6 +91,8 @@ router.put('/updateclockstatus/:MACAdd',(req,res,next)=>{
 //Update DoorStatus base on MAC
 router.put('/updatedoorstatus/:MACAdd',(req,res,next)=>{
     var newDoorStatus = req.body.DoorStatus;
+    if(typeof(newDoorStatus)=='boolean'){
+        console.log('Status boolean'+typeof(newDoorStatus));
     Device.putDoorStatusByMac(req.params.MACAdd,newDoorStatus,(err,device)=>{
         if(err) throw err;
 		if(!device){
@@ -99,5 +101,8 @@ router.put('/updatedoorstatus/:MACAdd',(req,res,next)=>{
             res.json({Success: true , msg: 'Update successfully' , DoorStatus: newDoorStatus});
         }
     });
+    }else{
+        res.json({Success: false , msg: 'Update fail'});
+    }
 });
 module.exports = router;
