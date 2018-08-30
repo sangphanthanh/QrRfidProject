@@ -32,3 +32,19 @@ module.exports.getDeviceByMac = function(Mac,callback){
     const query = {Mac:Mac}
     Device.findOne(query,callback);
 }
+//PUT ClockStatus By MacAddress
+module.exports.putClockStatusByMac = function(Mac, ClockStatus, callback){
+    Device.findOneAndUpdate({Mac:Mac},{$set:{ClockStatus:ClockStatus}}, function(err,doc){
+        if(err){
+            console.log("Something wrong when updating data!");
+        }
+    })
+}
+//PUT DoorStatus By MacAddress
+module.exports.putDoorStatusByMac = function(Mac, DoorStatus, callback){
+    Device.findOneAndUpdate({Mac:Mac},{$set:{DoorStatus:DoorStatus}}, function(err,doc){
+        if(err){
+            console.log("Something wrong when updating data!");
+        }
+    })
+}
