@@ -44,6 +44,7 @@ router.post('/authenticate',(req,res,next)=>{
 					user:{
 						id: user._id,
 						username: user.username,
+						IsAdmin: user.isAdmin,
 						RifdUID: user.RifdUID
 					}
 				});
