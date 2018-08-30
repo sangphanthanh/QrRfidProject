@@ -7,3 +7,7 @@ const LoginLogSchema = mongoose.Schema({
     Timestamp:  {type: String, require: true},
 });
 const LoginLog = module.exports = mongoose.model('loginlog',LoginLogSchema);
+
+nmodule.exports.addLoginLog = function(newLog, callback){
+    newLog.save(callback);
+}
