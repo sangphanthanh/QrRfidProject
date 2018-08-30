@@ -8,6 +8,6 @@ const LoginLogSchema = mongoose.Schema({
 });
 const LoginLog = module.exports = mongoose.model('loginlog',LoginLogSchema);
 
-nmodule.exports.addLoginLog = function(newLog, callback){
+module.exports.addLoginLog = function(newLog, callback){
     newLog.save(callback);
 }
