@@ -45,7 +45,7 @@ router.get('/qrcode/:MACAdd',(req,res,next)=>{
 		if(!device){
 			return res.json({success: false, msg: 'Device not found'});
         }else{
-            res.json({device:{QRCode: device.QRString}});
+            res.json({QRCode: device.QRString});
         }
     });
 });
@@ -58,7 +58,7 @@ router.get('/clockstatus/:MACAdd',(req,res,next)=>{
 		if(!device){
 			return res.json({success: false, msg: 'Device not found'});
         }else{
-            res.json({device:{ClockStatus: device.ClockStatus}});
+            res.json({ClockStatus: device.ClockStatus});
         }
     });
 });
