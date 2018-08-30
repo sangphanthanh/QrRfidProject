@@ -122,7 +122,7 @@ console.log('Status door: '+newDoorStatus);
 
 //Open Clock if UID 
 router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
-    var uid = req.body.RifdUID;
+    var uid = req.body.RfidUID;
     console.log('UID: '+uid);
     Device.getDeviceByMac(req.params.MACAdd,(err,device)=>{
         if(err) throw err;
@@ -136,7 +136,7 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
                     if(!user){
                         return res.json({success: false, msg: 'User not found'});
                     }
-                    if(user.RifdUID === uid){
+                    if(user.RfidUID === uid){
                         var newClockStatus = true;
                         if(typeof(newClockStatus)=='boolean'){
                         Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{

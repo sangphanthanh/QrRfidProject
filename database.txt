@@ -18,7 +18,7 @@ type User struct {
 	Username string        json:"userName" bson:"userName"
 	Password string        json:"password" bson:"password"
 	IsAdmin  bool          json:"isAdmin" bson:"isAdmin"
-	RifdUID  string        json:"rifdUID" bson:"rifUID"
+	RfidUID  string        json:"rifdUID" bson:"rifUID"
 }
 type LoginLog struct {
 	ID         bson.ObjectId json:"id" bson:"id"

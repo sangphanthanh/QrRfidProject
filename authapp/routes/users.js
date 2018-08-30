@@ -11,7 +11,7 @@ router.post('/register',(req,res,next)=>{
 		username: req.body.username,
 		password: req.body.password,
 		IsAdmin:  req.body.isAdmin,
-		RifdUID:  req.body.RifdUID
+		RfidUID:  req.body.RfidUID
 	});
 	var tempUser = User.getUserByUsername(newUser.username,(err,user)=>{
 		if(err) throw err;
@@ -52,7 +52,7 @@ router.post('/authenticate',(req,res,next)=>{
 						id: user._id,
 						username: user.username,
 						IsAdmin: user.IsAdmin,
-						RifdUID: user.RifdUID
+						RfidUID: user.RfidUID
 					}
 				});
 			}else{

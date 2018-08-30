@@ -8,7 +8,7 @@ const UserSchema = mongoose.Schema({
     username:   {   type: String,   require: true },
     password:   {   type: String,   require: true },
     IsAdmin:    {   type: Boolean,  require: true },
-    RifdUID:    {   type: String,   require: true},
+    RfidUID:    {   type: String,   require: true},
 });
 
 const User = module.exports = mongoose.model('User',UserSchema);
@@ -46,7 +46,7 @@ module.exports.comparePassword = function(candidatePassword,hash,callback){
 }
 
 //find User base on UID
-module.exports.getUserByUID = function(RifdUID,callback){
-    const query = {RifdUID: RifdUID}
+module.exports.getUserByUID = function(RfidUID,callback){
+    const query = {RfidUID: RifdUID}
     User.findOne(query,callback);
 }
