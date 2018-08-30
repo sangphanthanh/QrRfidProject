@@ -79,15 +79,25 @@ router.get('/clockstatus/:MACAdd',(req,res,next)=>{
 //Update ClockStatus base on MAC
 router.put('/updateclockstatus/:MACAdd',(req,res,next)=>{
     var newClockStatus = req.body.ClockStatus;
-    Device.putClockStatusByMac(req.params.MACAdd,newClockStatus);
-    console.log('ClockStatus has been updated');
-    return res.json({Success: true , msg: 'Update successfully'});
+    Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{
+        if(err) throw err;
+		if(!device){
+			return res.json({success: false, msg: 'Device not found'});
+        }else{
+            res.json({Success: true , msg: 'Update successfully' , ClockStatus: newClockStatus});
+        }
+    });
 });
 //Update DoorStatus base on MAC
 router.put('/updatedoorstatus/:MACAdd',(req,res,next)=>{
     var newDoorStatus = req.body.DoorStatus;
-    Device.putClockStatusByMac(req.params.MACAdd,newDoorStatus);
-    console.log('DoorStatus has been updated');
-    return res.json({Success: true , msg: 'Update successfully'});
+    Device.putDoorStatusByMac(req.params.MACAdd,newDoorStatus,(err,device)=>{
+        if(err) throw err;
+		if(!device){
+			return res.json({success: false, msg: 'Device not found'});
+        }else{
+            res.json({Success: true , msg: 'Update successfully' , DoorStatus: newDoorStatus});
+        }
+    });
 });
 module.exports = router;
