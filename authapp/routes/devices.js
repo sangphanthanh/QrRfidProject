@@ -79,6 +79,7 @@ router.get('/doorstatus/:MACAdd',(req,res,next)=>{
 //Update ClockStatus base on MAC
 router.put('/updateclockstatus/:MACAdd',(req,res,next)=>{
     var newClockStatus = req.body.ClockStatus;
+    if(typeof(newClockStatus)=='boolean'){
     Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{
         if(err) throw err;
 		if(!device){
@@ -87,6 +88,9 @@ router.put('/updateclockstatus/:MACAdd',(req,res,next)=>{
             res.json({Success: true , msg: 'Update successfully' , ClockStatus: newClockStatus});
         }
     });
+    }else{
+        res.json({Success: false , msg: 'Update fail'});
+    }
 });
 //Update DoorStatus base on MAC
 router.put('/updatedoorstatus/:MACAdd',(req,res,next)=>{
