@@ -13,12 +13,19 @@ router.post('/register',(req,res,next)=>{
 		IsAdmin:  req.body.isAdmin,
 		RifdUID:  req.body.RifdUID
 	});
-	User.addUser(newUser,(err,user)=>{
-	if(err){
-		res.json({success: false, msg: 'Fail to register'+ err});	
-	}else{
-		res.json({success: true, msg: 'User registered'});
-	}
+	var tempUser = User.getUserByUsername(newUser.username,(err,user)=>{
+		if(err) throw err;
+		if(!user){
+			User.addUser(newUser,(err,user)=>{
+				if(err){
+					res.json({success: false, msg: 'Fail to register'+ err});	
+				}else{
+					res.json({success: true, msg: 'User registered'});
+				}
+				});
+		}else{
+			res.json({success: false, msg: 'Username already added'});	
+		}
 	});
 });
 

@@ -18,14 +18,22 @@ router.post('/addDevice',(req,res,next)=>{
         DoorDescription:req.body.DoorDescription,
         UserID:     req.body.UserID
     });
-    Device.addDevice(newDevice, (err,device)=>{
-        if(err){
-            res.json({success: false , msg: 'Fail to add new device'});
+    var tempDevice = Device.getDeviceByMac(newDevice.Mac,(err,device)=>{
+        if(err) throw err;
+        if(!device){
+            Device.addDevice(newDevice, (err,device)=>{
+                if(err){
+                    res.json({success: false , msg: 'Fail to add new device'});
+                }else{
+                    res.json({success: true, msg: 'Added new device'});
+                    console.log("Device Mac: "+ newDevice.Mac + " has been added");
+                }
+            });
         }else{
-            res.json({success: true, msg: 'Added new device'});
-            console.log("Device Mac: "+ newDevice.Mac + " has been added");
+            res.json({success: false, msg: 'Device already added'});
         }
-    });
+    })
+    
 });
 //GetListDevice
 router.get('/listDevice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
@@ -115,6 +123,7 @@ console.log('Status door: '+newDoorStatus);
 //Open Clock if UID 
 router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
     var uid = req.body.RifdUID;
+    console.log('UID: '+uid);
     Device.getDeviceByMac(req.params.MACAdd,(err,device)=>{
         if(err) throw err;
 		if(!device){
