@@ -44,7 +44,7 @@ router.post('/authenticate',(req,res,next)=>{
 					user:{
 						id: user._id,
 						username: user.username,
-						IsAdmin: user.isAdmin,
+						IsAdmin: user.IsAdmin,
 						RifdUID: user.RifdUID
 					}
 				});
@@ -57,6 +57,7 @@ router.post('/authenticate',(req,res,next)=>{
 
 //Profile
 router.get('/profile',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
+	console.log("JSON: "+req.user);
 	res.json({user: req.user});
 });
 
