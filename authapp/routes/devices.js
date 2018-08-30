@@ -106,7 +106,6 @@ router.put('/updatedoorstatus/:MACAdd',(req,res,next)=>{
     var newDoorStatus = req.body.DoorStatus;
 console.log('Status door: '+newDoorStatus);
     if(typeof(newDoorStatus)=='boolean'){
-        console.log('Status boolean'+typeof(newDoorStatus));
     Device.putDoorStatusByMac(req.params.MACAdd,newDoorStatus,(err,device)=>{
         if(err) throw err;
 		if(!device){
