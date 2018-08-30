@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const Device = require('../models/device');
+const User = require('../models/user');
 
 router.post('/addDevice',(req,res,next)=>{
     let newDevice = new Device({
@@ -110,4 +111,43 @@ console.log('Status door: '+newDoorStatus);
         res.json({Success: false , msg: 'Update fail'});
     }
 });
+
+//Open Clock if UID 
+router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
+    var uid = req.body.RifdUID;
+    Device.getDeviceByMac(req.params.MACAdd,(err,device)=>{
+        if(err) throw err;
+		if(!device){
+			return res.json({success: false, msg: 'Device not found'});
+        }else{
+            for(var i = 0; i < device.UserID.length; i++){
+                console.log("User ID: "+device.UserID);
+                User.getUserById(device.UserID,(err,user)=>{
+                    if(err) throw err;
+                    if(!user){
+                        return res.json({success: false, msg: 'User not found'});
+                    }
+                    if(user.RifdUID === uid){
+                        var newClockStatus = true;
+                        if(typeof(newClockStatus)=='boolean'){
+                        Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{
+                            if(err) throw err;
+                            if(!device){
+                                return res.json({success: false, msg: 'Device not found'});
+                            }else{
+                                res.json({Success: true , msg: 'Update successfully' , ClockStatus: newClockStatus});
+                            }
+                        });
+                        }else{
+                            res.json({Success: false , msg: 'Update fail'});
+                        }
+                    }else{
+                        res.json({Success: false , msg: 'Uid not match'});
+                    }
+                })
+            }
+        }
+    });
+});
+
 module.exports = router;

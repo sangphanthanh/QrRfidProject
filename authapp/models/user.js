@@ -44,3 +44,9 @@ module.exports.comparePassword = function(candidatePassword,hash,callback){
         callback(null, isMatch);
     });
 }
+
+//find User base on UID
+module.exports.getUserByUID = function(RifdUID,callback){
+    const query = {RifdUID: RifdUID}
+    User.findOne(query,callback);
+}

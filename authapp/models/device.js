@@ -11,7 +11,7 @@ const DeviceSchema = mongoose.Schema({
     DoorID:     {type: Number, require: true},
     DoorStatus: {type: Boolean,require: true},
     DoorDescription:{type:String, require:false},
-    UserID:     {type: String, require: true},
+    UserID:     [mongoose.Schema.Types.ObjectId],
 });
 
 const Device = module.exports = mongoose.model('device',DeviceSchema);
