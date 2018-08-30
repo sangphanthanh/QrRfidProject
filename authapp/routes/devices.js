@@ -37,4 +37,16 @@ router.get('/listDevice',passport.authenticate('jwt',{session:false}),(req,res,n
         }
     });
 });
+//getQrCode base on MAC
+router.get('/qrcode/:MACAdd',(req,res,next)=>{
+    console.log('MAC: '+req.params.MACAdd);
+    Device.getQRCodeByMac(req.params.MACAdd,(err,device)=>{
+        if(err) throw err;
+		if(!device){
+			return res.json({success: false, msg: 'Device not found'});
+        }else{
+            res.json({device:{QRCode: device.QRString}});
+        }
+    });
+});
 module.exports = router;

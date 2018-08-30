@@ -27,3 +27,9 @@ module.exports.getDeviceByUserID = function(UserID,callback){
     const query = {UserID:UserID}
     Device.findOne(query,callback);
 }
+
+//Get QRCode By MACAddress
+module.exports.getQRCodeByMac = function(Mac,callback){
+    const query = {Mac:Mac}
+    Device.findOne(query,callback);
+}
