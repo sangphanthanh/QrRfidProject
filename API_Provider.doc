@@ -1,0 +1,19 @@
+-- Add new device
+Link: http://192.168.1.202:8000/devices/addDevice
+Method: POST
+Content-Type:application/json
+Body: {
+	"Mac":"FF:FF:FF:FF:FF:FF",
+	"ChipSerial":"0000",
+	"IsActive":"1",
+	"QRString":"QRAuthenticationCode",
+	"ClockID":"1",
+	"ClockStatus":"0",
+	"ClockDescription":"",
+	"DoorID":"1",
+	"DoorStatus":"0",
+	"DoorDescription":"",
+	"UserID":"5b85081daa95710824021306"
+}
+
+-- 
