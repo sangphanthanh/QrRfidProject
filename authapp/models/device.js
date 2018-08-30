@@ -43,3 +43,9 @@ module.exports.putDoorStatusByMac = function(Mac, DoorStatus, callback){
     const query = {Mac:Mac}
     Device.findOneAndUpdate(query,{$set:{DoorStatus:DoorStatus}},callback);
 }
+
+//PUT QRCode By MacAddress
+module.exports.putQRCodeByMac = function(Mac, QRCode, callback){
+    const query = {Mac:Mac}
+    Device.findOneAndUpdate(query,{$set:{QRCode:QRCode}},callback);
+}

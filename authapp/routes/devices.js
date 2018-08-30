@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const Device = require('../models/device');
 const User = require('../models/user');
+const randomString = require('randomstring');
 
 router.post('/addDevice',(req,res,next)=>{
     let newDevice = new Device({
@@ -56,6 +57,15 @@ router.get('/qrcode/:MACAdd',(req,res,next)=>{
         }else{
             res.json({QRCode: device.QRString});
             console.log('Device : '+req.params.MACAdd + ' trail QrCode: ' + device.QRString);
+            //put QRCode by Mac
+            Device.putQRCodeByMac(req.params.MACAdd,randomString.generate(),(err,device)=>{
+                if(err) throw err;
+                if(!device){
+                    console.log('Device not found!');
+                }else{
+                    console.log('Update QR Code Successfully');
+                }
+            });
         }
     });
 });
