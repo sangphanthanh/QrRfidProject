@@ -58,7 +58,9 @@ router.get('/qrcode/:MACAdd',(req,res,next)=>{
             res.json({QRCode: device.QRString});
             console.log('Device : '+req.params.MACAdd + ' trail QrCode: ' + device.QRString);
             //put QRCode by Mac
-            Device.putQRCodeByMac(req.params.MACAdd,randomString.generate(),(err,device)=>{
+            var qrgen = randomString.generate();
+            console.log('QR Generation: '+qrgen);
+            Device.putQRCodeByMac(req.params.MACAdd,qrgen,(err,device)=>{
                 if(err) throw err;
                 if(!device){
                     console.log('Device not found!');
