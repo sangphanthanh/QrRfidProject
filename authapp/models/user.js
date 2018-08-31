@@ -50,3 +50,8 @@ module.exports.getUserByUID = function(RfidUID,callback){
     const query = {RfidUID: RifdUID}
     User.findOne(query,callback);
 }
+
+//get all User
+module.exports.getAll =  function(callback){
+    User.find(callback);
+}

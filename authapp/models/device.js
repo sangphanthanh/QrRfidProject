@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const randomString = require('randomstring');
 
 const DeviceSchema = mongoose.Schema({
     Mac:        {type: String, require: true},
@@ -45,7 +46,9 @@ module.exports.putDoorStatusByMac = function(Mac, DoorStatus, callback){
 }
 
 //PUT QRCode By MacAddress
-module.exports.putQRCodeByMac = function(Mac, QRCode, callback){
+module.exports.randomQRCodeByMac = function(Mac, callback){
+    var qrgen = Mac + randomString.generate(20);
+    console.log('QR Generation: '+qrgen);
     const query = {Mac:Mac}
-    Device.findOneAndUpdate(query,{$set:{QRString:QRCode}},callback);
+    Device.findOneAndUpdate(query,{$set:{QRString:qrgen}},callback);
 }

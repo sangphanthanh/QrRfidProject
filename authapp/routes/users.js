@@ -68,4 +68,16 @@ router.get('/profile',passport.authenticate('jwt',{session:false}),(req,res,next
 	res.json({user: req.user});
 });
 
+//Update user info
+router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
+	var tempUser = req.user;
+	var newIsAdmin = req.body.IsAdmin;
+	var newRfidUID = req.body.RfidUID;
+	if(tempUser.IsAdmin == true){
+		
+	}else{
+		
+	}
+});
+
 module.exports = router;
