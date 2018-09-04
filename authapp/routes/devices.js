@@ -214,4 +214,30 @@ router.post('/CheckQRCode',passport.authenticate('jwt',{session:false}),(req,res
             // });
 });
 
+//Update UserID on Device
+router.put('/updateUserIdOnDevice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
+    var userId = req.body.userID;
+    var deviceId = req.body.deviceID;
+    Device.updateUserIdonDevice(userId,deviceId,(err,device)=>{
+        if(err) throw err;
+        if(!device){
+            res.json({Success: false , msg: 'Update fail'});
+        }else{
+            res.json({Success: true , msg: 'Update successfully'});
+        }
+    })
+});
+
+//Get List device
+router.get('/listdevice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
+    Device.findall((err,listDevice)=>{
+        if(err) throw err;
+        if(!listDevice){
+            res.json({Success: false , msg: 'Empty'});
+        }else{
+            res.send(listDevice);
+        }
+    });
+});
 module.exports = router;
+

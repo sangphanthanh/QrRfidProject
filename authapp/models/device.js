@@ -23,10 +23,10 @@ module.exports.addDevice = function(newDevice, callback){
 }
 
 //Get Device by UserID
-module.exports.getDeviceByUserID = function(UserID,callback){
-    const query = {UserID:UserID}
-    Device.findOne(query,callback);
-}
+// module.exports.getDeviceByUserID = function(UserID,callback){
+//     const query = {UserID:UserID}
+//     Device.findOne(query,callback);
+// }
 
 //Get Device By MACAddress
 module.exports.getDeviceByMac = function(Mac,callback){
@@ -51,4 +51,16 @@ module.exports.randomQRCodeByMac = function(Mac, callback){
     console.log('QR Generation: '+qrgen);
     const query = {Mac:Mac}
     Device.findOneAndUpdate(query,{$set:{QRString:qrgen}},callback);
+}
+
+module.exports.getDeviceById = function(deviceId,callback){
+    Device.findById(deviceId,callback);
+}
+
+module.exports.updateUserIdonDevice = function(userId,deviceId,callback){
+    Device.findByIdAndUpdate(deviceId,{$push:{UserID:userId}},callback);
+}
+
+module.exports.findall = function(callback){
+    Device.find({},callback);
 }

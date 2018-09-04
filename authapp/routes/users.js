@@ -96,5 +96,15 @@ router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,re
 		return res.json({success: false, msg: 'Permission require'});
 	}
 });
-
+//Get List user
+router.get('/listuser',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
+    User.findall((err,listUser)=>{
+        if(err) throw err;
+        if(!listUser){
+            res.json({Success: false , msg: 'Empty'});
+        }else{
+            res.send(listUser);
+        }
+    });
+});
 module.exports = router;

@@ -68,3 +68,7 @@ module.exports.updateUser = function(newUser,callback){
     });
    
 }
+
+module.exports.findall = function(callback){
+    User.find({},callback);
+}
