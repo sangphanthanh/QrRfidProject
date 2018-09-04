@@ -47,7 +47,7 @@ module.exports.putDoorStatusByMac = function(Mac, DoorStatus, callback){
 
 //PUT QRCode By MacAddress
 module.exports.randomQRCodeByMac = function(Mac, callback){
-    var qrgen = Mac + randomString.generate(20);
+    var qrgen = Mac + randomString.generate(10);
     console.log('QR Generation: '+qrgen);
     const query = {Mac:Mac}
     Device.findOneAndUpdate(query,{$set:{QRString:qrgen}},callback);

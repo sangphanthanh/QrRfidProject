@@ -55,3 +55,16 @@ module.exports.getUserByUID = function(RfidUID,callback){
 module.exports.getAll =  function(callback){
     User.find(callback);
 }
+
+//Update User
+module.exports.updateUser = function(newUser,callback){
+    bcrypt.genSalt(config.roundSalt,(err,salt)=>{
+        bcrypt.hash(newUser.password, salt, (err, hash)=>{
+            if(err) throw err;
+            newUser.password = hash;
+            const query = {username:newUser.username}
+            User.findOneAndUpdate(query,{$set:{password:newUser.password,IsAdmin:newUser.IsAdmin,RfidUID: newUser.RfidUID}},callback);
+        })
+    });
+   
+}

@@ -20,7 +20,7 @@ router.post('/addDevice',passport.authenticate('jwt',{session:false}),(req,res,n
             DoorDescription:req.body.DoorDescription,
             UserID:     req.body.UserID
         });
-        newDevice.QRString = newDevice.Mac + randomString.generate(20);
+        newDevice.QRString = newDevice.Mac + randomString.generate(10);
         var tempDevice = Device.getDeviceByMac(newDevice.Mac,(err,device)=>{
             if(err) throw err;
             if(!device){

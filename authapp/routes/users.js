@@ -13,7 +13,7 @@ router.post('/register',(req,res,next)=>{
 		IsAdmin:  req.body.isAdmin,
 		RfidUID:  req.body.RfidUID
 	});
-	var tempUser = User.getUserByUsername(newUser.username,(err,user)=>{
+	User.getUserByUsername(newUser.username,(err,user)=>{
 		if(err) throw err;
 		if(!user){
 			User.addUser(newUser,(err,user)=>{
@@ -71,12 +71,29 @@ router.get('/profile',passport.authenticate('jwt',{session:false}),(req,res,next
 //Update user info
 router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
 	var tempUser = req.user;
-	var newIsAdmin = req.body.IsAdmin;
-	var newRfidUID = req.body.RfidUID;
 	if(tempUser.IsAdmin == true){
-		
+		let newUser = new User({
+			username: tempUser.username,
+			password: req.body.password,
+			IsAdmin:  req.body.isAdmin,
+			RfidUID:  req.body.RfidUID
+		});
+		User.getUserByUsername(newUser.username,(err,user)=>{
+			if(err) throw err;
+			if(!user){
+				return res.json({success: false, msg: 'User not found'});
+			}else{
+				User.updateUser(newUser,(err,user)=>{
+					if(err){
+						return res.json({success: false, msg: 'Update error'});
+					}else{
+						return res.json({success: true, msg: 'Successful to update'});
+					}
+				})
+			}
+		});
 	}else{
-		
+		return res.json({success: false, msg: 'Permission require'});
 	}
 });
 
