@@ -11,7 +11,7 @@ router.post('/addDevice',passport.authenticate('jwt',{session:false}),(req,res,n
             Mac:        req.body.Mac,
             ChipSerial: req.body.ChipSerial,
             IsActive:   req.body.IsActive,
-            QRString:   req.body.QRString,
+            // QRString:   req.body.QRString,
             ClockID:    req.body.ClockID,
             ClockStatus:req.body.ClockStatus,
             ClockDescription:req.body.ClockDescription,
@@ -138,8 +138,8 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
 			return res.json({success: false, msg: 'Device not found'});
         }else{
             for(var i = 0; i < device.UserID.length; i++){
-                console.log("User ID: "+device.UserID);
-                User.getUserById(device.UserID,(err,user)=>{
+                console.log("User ID: "+device.UserID[i]);
+                User.getUserById(device.UserID[i],(err,user)=>{
                     if(err) throw err;
                     if(!user){
                         return res.json({success: false, msg: 'User not found'});
