@@ -140,6 +140,7 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
             for(var i = 0; i < device.UserID.length; i++){
                 console.log("User ID: "+device.UserID[i]);
                 User.getUserById(device.UserID[i],(err,user)=>{
+                    console.log('befoe error')
                     if(err) throw err;
                     if(!user){
                         // res.json({success: false, msg: 'User not found'});
