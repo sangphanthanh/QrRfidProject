@@ -71,7 +71,7 @@ router.get('/clockstatus/:MACAdd',(req,res,next)=>{
     Device.getDeviceByMac(req.params.MACAdd,(err,device)=>{
         if(err) throw err;
 		if(!device){
-			return res.json({success: false, msg: 'Device not found'});
+			// return res.json({success: false, msg: 'Device not found'});
         }else{
             res.json({ClockStatus: device.ClockStatus});
             console.log('Device : '+req.params.MACAdd+' trail ClockStatus: '+device.ClockStatus);
@@ -83,7 +83,7 @@ router.get('/doorstatus/:MACAdd',(req,res,next)=>{
     Device.getDeviceByMac(req.params.MACAdd,(err,device)=>{
         if(err) throw err;
 		if(!device){
-			return res.json({success: false, msg: 'Device not found'});
+			// return res.json({success: false, msg: 'Device not found'});
         }else{
             res.json({DoorStatus: device.DoorStatus});
             console.log('Device : '+req.params.MACAdd+' trail DoorStatus: '+device.DoorStatus);
@@ -101,13 +101,13 @@ router.put('/updateclockstatus/:MACAdd',(req,res,next)=>{
     Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{
         if(err) throw err;
 		if(!device){
-			return res.json({success: false, msg: 'Device not found'});
+			// return res.json({success: false, msg: 'Device not found'});
         }else{
-            res.json({Success: true , msg: 'Update successfully' , ClockStatus: newClockStatus});
+            res.json({Success: true});
         }
     });
     }else{
-        res.json({Success: false , msg: 'Update fail'});
+        res.json({Success: false});
     }
 });
 //Update DoorStatus base on MAC
@@ -118,58 +118,74 @@ console.log('Status door: '+newDoorStatus);
     Device.putDoorStatusByMac(req.params.MACAdd,newDoorStatus,(err,device)=>{
         if(err) throw err;
 		if(!device){
-			return res.json({success: false, msg: 'Device not found'});
+			return res.json({success: false});
         }else{
-            res.json({Success: true , msg: 'Update successfully' , DoorStatus: newDoorStatus});
+            res.json({Success: true});
         }
     });
     }else{
-        res.json({Success: false , msg: 'Update fail'});
+        res.json({Success: false});
     }
 });
 
 //Open Clock if UID 
 router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
     var uid = req.body.RfidUID;
+    var errFlag = false;
+    var msgErr;
     console.log('UID: '+uid);
     Device.getDeviceByMac(req.params.MACAdd,(err,device)=>{
         if(err) throw err;
 		if(!device){
+            errFlag = true;
+            msgErr = 'Device not found';
 			// return res.json({success: false, msg: 'Device not found'});
         }else{
             for(var i = 0; i < device.UserID.length; i++){
                 console.log("User ID: "+device.UserID[i]);
                 User.getUserById(device.UserID[i],(err,user)=>{
-                    console.log('befoe error')
                     if(err) throw err;
                     if(!user){
+                        errFlag = true;
+                        msgErr = 'User not found';
                         // res.json({success: false, msg: 'User not found'});
                         console.log('User not found')
                     }else{
 
-                    if(user.RfidUID === uid){
-                        console.log('User found');
-
-                        var newClockStatus = true;
-                        if(typeof(newClockStatus)=='boolean'){
-                            Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{
-                                console.log('clock status by mac');
-                                if(err) throw err;
-                                if(!device){
+                        if(user.RfidUID === uid){
+                            var newClockStatus = true;
+                            if(typeof(newClockStatus)=='boolean'){
+                                Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{
+                                    console.log('clock status by mac');
+                                    if(err) throw err;
+                                    if(!device){
+                                        errFlag = true;
+                                        msgErr = 'Device not found';
                                     // res.json({success: false, msg: 'Device not found'});
-                                }else{
-                                    console.log('Uid open door');
-                                    res.json({Success: true , msg: 'Update successfully' , ClockStatus: newClockStatus});
-                                }
+                                    }else{
+                                        console.log('Uid open door');
+                                        errFlag = false;
+                                        msgErr = 'Update successfully';
+                                        // res.json({Success: true , msg: 'Update successfully' , ClockStatus: newClockStatus});
+                                    }
                             })
                         }else{
+                            errFlag = true;
+                            msgErr = 'Update fail';
                             // res.json({Success: false , msg: 'Update fail'});
                         }
                     }else{
+                        errFlag = true;
+                        msgErr = 'Uid not match';
                         // res.json({Success: false , msg: 'Uid not match'});
                     }
                 }})
             }
+        }
+        if(errFlag==true){
+            res.json({Success: false});
+        }else{
+            res.json({Success: true});
         }
     });
 });
