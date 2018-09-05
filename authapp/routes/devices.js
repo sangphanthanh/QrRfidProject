@@ -151,15 +151,16 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
 
                         var newClockStatus = true;
                         if(typeof(newClockStatus)=='boolean'){
-                        Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{
-                            if(err) throw err;
-                            if(!device){
-                                res.json({success: false, msg: 'Device not found'});
-                            }else{
-                                console.log('Uid open door');
-                                res.json({Success: true , msg: 'Update successfully' , ClockStatus: newClockStatus});
-                            }
-                        });
+                            Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{
+                                console.log('clock status by mac');
+                                if(err) throw err;
+                                if(!device){
+                                    res.json({success: false, msg: 'Device not found'});
+                                }else{
+                                    console.log('Uid open door');
+                                    res.json({Success: true , msg: 'Update successfully' , ClockStatus: newClockStatus});
+                                }
+                            })
                         }else{
                             res.json({Success: false , msg: 'Update fail'});
                         }
