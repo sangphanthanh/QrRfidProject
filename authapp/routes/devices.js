@@ -135,7 +135,7 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
     Device.getDeviceByMac(req.params.MACAdd,(err,device)=>{
         if(err) throw err;
 		if(!device){
-			return res.json({success: false, msg: 'Device not found'});
+			// return res.json({success: false, msg: 'Device not found'});
         }else{
             for(var i = 0; i < device.UserID.length; i++){
                 console.log("User ID: "+device.UserID[i]);
@@ -156,17 +156,17 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
                                 console.log('clock status by mac');
                                 if(err) throw err;
                                 if(!device){
-                                    res.json({success: false, msg: 'Device not found'});
+                                    // res.json({success: false, msg: 'Device not found'});
                                 }else{
                                     console.log('Uid open door');
                                     res.json({Success: true , msg: 'Update successfully' , ClockStatus: newClockStatus});
                                 }
                             })
                         }else{
-                            res.json({Success: false , msg: 'Update fail'});
+                            // res.json({Success: false , msg: 'Update fail'});
                         }
                     }else{
-                        res.json({Success: false , msg: 'Uid not match'});
+                        // res.json({Success: false , msg: 'Uid not match'});
                     }
                 }})
             }
