@@ -107,4 +107,32 @@ router.get('/listuser',passport.authenticate('jwt',{session:false}),(req,res,nex
         }
     });
 });
+
+//Change Passwd
+router.put('/changepasswd',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
+	var newpasswd = req.body.newpassword;
+	var oldpassword = req.body.oldpassword;
+	var username = req.user.username;
+
+	User.getUserByUsername(username,(err,user)=>{
+		if(err) throw err;
+		if(!user){
+			return res.json({success: false, msg: 'User not found'});
+		}
+		User.comparePassword(oldpassword, user.password, (err, isMatch)=>{
+			if(err) throw err;
+			if(isMatch){
+				//change password
+				User.changepasswd(user.username,newpasswd,(err,user)=>{
+					if(err) throw err;
+					if(user){
+						return res.json({success: true, msg: 'Password has been change'});
+					}
+				})
+			}else{
+				return res.json({success: false, msg: 'Wrong password'});
+			}
+		});
+	});
+});
 module.exports = router;

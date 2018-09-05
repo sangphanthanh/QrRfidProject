@@ -66,9 +66,19 @@ module.exports.updateUser = function(newUser,callback){
             User.findOneAndUpdate(query,{$set:{password:newUser.password,IsAdmin:newUser.IsAdmin,RfidUID: newUser.RfidUID}},callback);
         })
     });
-   
 }
 
 module.exports.findall = function(callback){
     User.find({},callback);
+}
+
+module.exports.changepasswd = function(uname,passwd,callback){
+    bcrypt.genSalt(config.roundSalt,(err,salt)=>{
+        bcrypt.hash(passwd, salt, (err, hash)=>{
+            if(err) throw err;
+            passwd = hash;
+            const query = {username:uname}
+            User.findOneAndUpdate(query,{$set:{password:passwd}},callback);
+        })
+    });
 }
