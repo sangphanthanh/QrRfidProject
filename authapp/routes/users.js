@@ -79,6 +79,7 @@ router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,re
 			RfidUID:  req.body.RfidUID
 		});
 		User.getUserByUsername(newUser.username,(err,user)=>{
+			console.log('User found');
 			if(err) throw err;
 			if(!user){
 				return res.json({success: false, msg: 'User not found'});

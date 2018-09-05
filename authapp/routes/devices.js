@@ -142,9 +142,13 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
                 User.getUserById(device.UserID[i],(err,user)=>{
                     if(err) throw err;
                     if(!user){
-                        res.json({success: false, msg: 'User not found'});
-                    }
+                        // res.json({success: false, msg: 'User not found'});
+                        console.log('User not found')
+                    }else{
+
                     if(user.RfidUID === uid){
+                        console.log('User found');
+
                         var newClockStatus = true;
                         if(typeof(newClockStatus)=='boolean'){
                         Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{
@@ -162,7 +166,7 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
                     }else{
                         res.json({Success: false , msg: 'Uid not match'});
                     }
-                })
+                }})
             }
         }
     });
