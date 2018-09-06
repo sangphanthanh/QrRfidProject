@@ -94,8 +94,7 @@ router.get('/doorstatus/:MACAdd',(req,res,next)=>{
 //Update ClockStatus base on MAC
 router.put('/updateclockstatus/:MACAdd',(req,res,next)=>{
     var newClockStatus = req.body.ClockStatus;
-    console.log('ClockStatus: '+newClockStatus);
-    console.log('Type of ClockStatus :'+typeof(newClockStatus));
+    // console.log('Type of ClockStatus :'+typeof(newClockStatus));
     if(typeof(newClockStatus)=='boolean'){
 
     Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{
@@ -104,6 +103,8 @@ router.put('/updateclockstatus/:MACAdd',(req,res,next)=>{
 			// return res.json({success: false, msg: 'Device not found'});
         }else{
             res.json({Success: true});
+            console.log('Update ClockStatus= '+newClockStatus);
+
         }
     });
     }else{
@@ -113,7 +114,7 @@ router.put('/updateclockstatus/:MACAdd',(req,res,next)=>{
 //Update DoorStatus base on MAC
 router.put('/updatedoorstatus/:MACAdd',(req,res,next)=>{
     var newDoorStatus = req.body.DoorStatus;
-console.log('Status door: '+newDoorStatus);
+// console.log('Status door: '+newDoorStatus);
     if(typeof(newDoorStatus)=='boolean'){
     Device.putDoorStatusByMac(req.params.MACAdd,newDoorStatus,(err,device)=>{
         if(err) throw err;
@@ -121,6 +122,7 @@ console.log('Status door: '+newDoorStatus);
 			return res.json({success: false});
         }else{
             res.json({Success: true});
+            console.log('Update DoorStatus= '+newDoorStatus);
         }
     });
     }else{
