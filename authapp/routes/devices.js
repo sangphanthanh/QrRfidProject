@@ -71,7 +71,7 @@ router.get('/clockstatus/:MACAdd',(req,res,next)=>{
     Device.getDeviceByMac(req.params.MACAdd,(err,device)=>{
         if(err) throw err;
 		if(!device){
-			// return res.json({success: false, msg: 'Device not found'});
+			return res.json({success: false});
         }else{
             res.json({ClockStatus: device.ClockStatus});
             console.log('Device : '+req.params.MACAdd+' trail ClockStatus: '+device.ClockStatus);
@@ -83,7 +83,7 @@ router.get('/doorstatus/:MACAdd',(req,res,next)=>{
     Device.getDeviceByMac(req.params.MACAdd,(err,device)=>{
         if(err) throw err;
 		if(!device){
-			// return res.json({success: false, msg: 'Device not found'});
+			return res.json({success: false});
         }else{
             res.json({DoorStatus: device.DoorStatus});
             console.log('Device : '+req.params.MACAdd+' trail DoorStatus: '+device.DoorStatus);
