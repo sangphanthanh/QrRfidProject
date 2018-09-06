@@ -40,7 +40,7 @@ module.exports.putClockStatusByMac = function(Mac, ClockStatus, callback){
 }
 //PUT DoorStatus By MacAddress
 module.exports.putDoorStatusByMac = function(Mac, DoorStatus, callback){
-    console.log('doorStatus: ' + DoorStatus);
+    // console.log('doorStatus: ' + DoorStatus);
     const query = {Mac:Mac}
     Device.findOneAndUpdate(query,{$set:{DoorStatus:DoorStatus}},callback);
 }
