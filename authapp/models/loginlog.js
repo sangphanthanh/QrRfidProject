@@ -9,5 +9,8 @@ const LoginLogSchema = mongoose.Schema({
 const LoginLog = module.exports = mongoose.model('loginlog',LoginLogSchema);
 
 module.exports.addLoginLog = function(newLog, callback){
+    var day = new Date();
+    newLog.Timestamp = day;
     newLog.save(callback);
 }
+

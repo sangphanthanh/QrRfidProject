@@ -64,3 +64,10 @@ module.exports.updateUserIdonDevice = function(userId,deviceId,callback){
 module.exports.findall = function(callback){
     Device.find({},callback);
 }
+
+module.exports.updateDevice = function(device, callback){
+    const query = {_id:device._id}
+    Device.findOneAndUpdate(query,{$set:{Mac:device.Mac,ChipSerial: device.ChipSerial,IsActive: device.IsActive,
+        ClockID:device.ClockID,ClockStatus: device.ClockStatus,ClockDescription: device.ClockDescription,
+        DoorID: device.DoorID,DoorStatus: device.DoorStatus,DoorDescription: device.DoorDescription}},callback);
+}

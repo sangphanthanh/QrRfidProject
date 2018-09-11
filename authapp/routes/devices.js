@@ -4,6 +4,7 @@ const passport = require('passport');
 const Device = require('../models/device');
 const User = require('../models/user');
 const randomString = require('randomstring');
+const LoginLog = require('../models/loginlog');
 
 router.post('/addDevice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
     if(req.user.IsAdmin == true){
@@ -100,7 +101,7 @@ router.put('/updateclockstatus/:MACAdd',(req,res,next)=>{
     Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{
         if(err) throw err;
 		if(!device){
-			// return res.json({success: false, msg: 'Device not found'});
+			return res.json({success: false});
         }else{
             res.json({Success: true});
             console.log('Update ClockStatus= '+newClockStatus);
@@ -165,6 +166,13 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
                                         msgErr = 'Device not found';
                                     // res.json({success: false, msg: 'Device not found'});
                                     }else{
+                                        let loginLog = new LoginLog({
+                                            DoorStatus : newClockStatus,
+                                            Creator : user.username +' On RFID'
+                                        })
+                                        LoginLog.addLoginLog(loginLog,(err,lolog)=>{
+                                            if(err) throw err;
+                                        })
                                         console.log('Uid open door');
                                         errFlag = false;
                                         msgErr = 'Update successfully';
@@ -214,6 +222,13 @@ router.post('/CheckQRCode',passport.authenticate('jwt',{session:false}),(req,res
                             if(!device){
                                 return res.json({success: false, msg: 'Device not found'});
                             }else{
+                                let loginLog = new LoginLog({
+                                    DoorStatus : true,
+                                    Creator : req.user.username +' On Mobile QR Scan'
+                                })
+                                LoginLog.addLoginLog(loginLog,(err,lolog)=>{
+                                    if(err) throw err;
+                                })
                                 return res.json({success: true, msg: 'Updated new QRCode'});
                             }
                         });
@@ -264,5 +279,35 @@ router.get('/listdevice',passport.authenticate('jwt',{session:false}),(req,res,n
         }
     });
 });
-module.exports = router;
 
+//Update module device
+router.put('/updateDevice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
+    var tempUser = req.user;
+	if(tempUser.IsAdmin == true){
+		let newDevice = new Device({
+            _id:        req.body._id,
+            Mac:        req.body.Mac,
+            ChipSerial: req.body.ChipSerial,
+            IsActive:   req.body.IsActive,
+            //QRString:   req.body.QRString,
+            ClockID:    req.body.ClockID,
+            ClockStatus:req.body.ClockStatus,
+            ClockDescription:req.body.ClockDescription,
+            DoorID:     req.body.DoorID,
+            DoorStatus: req.body.DoorStatus,
+            DoorDescription:req.body.DoorDescription,
+            // UserID:     req.body.UserID
+        });
+        Device.updateDevice(newDevice,(err,device)=>{
+            if(err){
+                return res.json({success: false, msg: 'Update error'});
+            }else{
+                return res.json({success: true, msg: 'Successful to update'});
+            }
+        })
+	}else{
+		return res.json({success: false, msg: 'Permission require'});
+	}
+});
+
+module.exports = router;

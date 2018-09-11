@@ -58,14 +58,10 @@ module.exports.getAll =  function(callback){
 
 //Update User
 module.exports.updateUser = function(newUser,callback){
-    bcrypt.genSalt(config.roundSalt,(err,salt)=>{
-        bcrypt.hash(newUser.password, salt, (err, hash)=>{
-            if(err) throw err;
-            newUser.password = hash;
-            const query = {username:newUser.username}
-            User.findOneAndUpdate(query,{$set:{password:newUser.password,IsAdmin:newUser.IsAdmin,RfidUID: newUser.RfidUID}},callback);
-        })
-    });
+
+    const query = {username:newUser.username}
+    User.findOneAndUpdate(query,{$set:{IsAdmin:newUser.IsAdmin,RfidUID: newUser.RfidUID}},callback);
+
 }
 
 module.exports.findall = function(callback){

@@ -74,12 +74,11 @@ router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,re
 	if(tempUser.IsAdmin == true){
 		let newUser = new User({
 			username: tempUser.username,
-			password: req.body.password,
+			// password: req.body.password,
 			IsAdmin:  req.body.isAdmin,
 			RfidUID:  req.body.RfidUID
 		});
 		User.getUserByUsername(newUser.username,(err,user)=>{
-			console.log('User found');
 			if(err) throw err;
 			if(!user){
 				return res.json({success: false, msg: 'User not found'});
