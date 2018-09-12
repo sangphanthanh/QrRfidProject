@@ -13,7 +13,7 @@ module.exports.addLoginLog = function(newLog, callback){
     newLog.Timestamp = day;
     newLog.save(callback);
 }
-
+//trace all log
 module.exports.traceLog = function(callback){
     LoginLog.find(callback);
 }
