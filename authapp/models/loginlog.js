@@ -14,3 +14,6 @@ module.exports.addLoginLog = function(newLog, callback){
     newLog.save(callback);
 }
 
+module.exports.traceLog = function(callback){
+    LoginLog.find(callback);
+}

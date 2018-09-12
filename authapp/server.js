@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname,'public')));
 app.use(bodyParser.json());
 app.use('/users',users);
 app.use('/devices',devices);
-app.use('/loginlog',loginlogs);
+app.use('/loginlogs',loginlogs);
 
 //Passport Middleware
 app.use(passport.initialize());
