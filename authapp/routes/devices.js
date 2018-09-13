@@ -136,7 +136,7 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
     var uid = req.body.RfidUID;
     var errFlag = false;
     var msgErr;
-    console.log('UID: '+uid);
+    // console.log('UID: '+uid);
     Device.getDeviceByMac(req.params.MACAdd,(err,device)=>{
         if(err) throw err;
 		if(!device){
@@ -145,7 +145,7 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
 			// return res.json({success: false, msg: 'Device not found'});
         }else{
             for(var i = 0; i < device.UserID.length; i++){
-                console.log("User ID: "+device.UserID[i]);
+                // console.log("User ID: "+device.UserID[i]);
                 User.getUserById(device.UserID[i],(err,user)=>{
                     if(err) throw err;
                     if(!user){
@@ -159,7 +159,7 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
                             var newClockStatus = true;
                             if(typeof(newClockStatus)=='boolean'){
                                 Device.putClockStatusByMac(req.params.MACAdd,newClockStatus,(err,device)=>{
-                                    console.log('clock status by mac');
+                                    // console.log('clock status by mac');
                                     if(err) throw err;
                                     if(!device){
                                         errFlag = true;
@@ -167,13 +167,17 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
                                     // res.json({success: false, msg: 'Device not found'});
                                     }else{
                                         let loginLog = new LoginLog({
-                                            DoorStatus : newClockStatus,
-                                            Creator : user.username +' On RFID'
+                                            Device: device.Mac,
+                                            TypeOfServices: 'RFID',
+                                            Info:{
+                                                DoorStatus: newClockStatus,
+                                                Actor:    user.username,
+                                            }
                                         })
                                         LoginLog.addLoginLog(loginLog,(err,lolog)=>{
                                             if(err) throw err;
                                         })
-                                        console.log('Uid open door');
+                                        // console.log('Uid open door');
                                         errFlag = false;
                                         msgErr = 'Update successfully';
                                         // res.json({Success: true , msg: 'Update successfully' , ClockStatus: newClockStatus});
@@ -223,8 +227,12 @@ router.post('/CheckQRCode',passport.authenticate('jwt',{session:false}),(req,res
                                 return res.json({success: false, msg: 'Device not found'});
                             }else{
                                 let loginLog = new LoginLog({
-                                    DoorStatus : true,
-                                    Creator : req.user.username +' On Mobile QR Scan'
+                                    Device: device.Mac,
+                                    TypeOfServices: 'QRScan',
+                                    Info:{
+                                        DoorStatus: true,
+                                        Actor:    req.user.username,
+                                    }
                                 })
                                 LoginLog.addLoginLog(loginLog,(err,lolog)=>{
                                     if(err) throw err;
