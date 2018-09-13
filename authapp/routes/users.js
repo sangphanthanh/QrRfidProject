@@ -73,7 +73,7 @@ router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,re
 	var tempUser = req.user;
 	if(tempUser.IsAdmin == true){
 		let newUser = new User({
-			username: tempUser.username,
+			username: req.body.username,
 			// password: req.body.password,
 			IsAdmin:  req.body.isAdmin,
 			RfidUID:  req.body.RfidUID
@@ -85,9 +85,9 @@ router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,re
 			}else{
 				User.updateUser(newUser,(err,user)=>{
 					if(err){
-						return res.json({success: false, msg: 'Update error'});
+						return res.json({success: false, msg: 'Update Error'});
 					}else{
-						return res.json({success: true, msg: 'Successful to update'});
+						return res.json({success: true, msg: 'Update Success'});
 					}
 				})
 			}
