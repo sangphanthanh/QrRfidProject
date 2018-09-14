@@ -13,5 +13,28 @@ router.get('/tracelog',passport.authenticate('jwt',{session:false}),(req,res,nex
         }
     });
 });
-
+//filter by mac
+router.post('/tracelogbymac',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
+    var macDevice = req.body.macDevice;
+    Loginlog.findByMacDevice(macDevice,(err,logLog)=>{
+        if(err) throw err;
+        if(!logLog){
+            res.json({Success: false , msg: 'Empty'});
+        }else{
+            res.send(logLog);
+        }
+    });
+});
+//filter by type of service
+router.post('/tracelogbyservice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
+    var service= req.body.service;
+    Loginlog.findByServices(service,(err,logLog)=>{
+        if(err) throw err;
+        if(!logLog){
+            res.json({Success: false , msg: 'Empty'});
+        }else{
+            res.send(logLog);
+        }
+    });
+});
 module.exports = router;

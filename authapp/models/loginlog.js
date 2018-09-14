@@ -21,3 +21,15 @@ module.exports.addLoginLog = function(newLog, callback){
 module.exports.traceLog = function(callback){
     LoginLog.find(callback);
 }
+
+//find by device
+module.exports.findByMacDevice = function(macDevice,callback){
+    const query = {Device: macDevice}
+    LoginLog.findOne(query,callback);
+}
+
+//find by service
+module.exports.findByServices = function(service,callback){
+    const query = {TypeOfServices: service}
+    LoginLog.findOne(query,callback);
+}
