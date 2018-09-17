@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const config = require('../config/config');
 
-//UserSchema
+/**
+ * Create User Schema
+ */
 const UserSchema = mongoose.Schema({
     username:   {   type: String,   require: true },
     password:   {   type: String,   require: true },
@@ -13,18 +15,30 @@ const UserSchema = mongoose.Schema({
 
 const User = module.exports = mongoose.model('User',UserSchema);
 
-//GetUserById
+/**
+ * Get user by id
+ * @param {*} id 
+ * @param {*} callback 
+ */
 module.exports.getUserById = function(id,callback){
     User.findById(id,callback);
 }
 
-//GetUserByUsername
+/**
+ * Get user by username 
+ * @param {*} username 
+ * @param {*} callback 
+ */
 module.exports.getUserByUsername = function(username,callback){
     const query = {username: username}
     User.findOne(query,callback);
 }
 
-//AddUser
+/**
+ * Add new User 
+ * @param {*} newUser 
+ * @param {*} callback 
+ */
 module.exports.addUser = function(newUser, callback){
     bcrypt.genSalt(config.roundSalt,(err,salt)=>{
         bcrypt.hash(newUser.password, salt, (err, hash)=>{
@@ -35,7 +49,12 @@ module.exports.addUser = function(newUser, callback){
     });
 }
 
-//comparePassword
+/**
+ * Compare password authenticate
+ * @param {*} candidatePassword 
+ * @param {*} hash 
+ * @param {*} callback 
+ */
 module.exports.comparePassword = function(candidatePassword,hash,callback){
 //    console.log('CanPassword '+ candidatePassword);
 //    console.log('Hash ' + hash);
@@ -45,29 +64,49 @@ module.exports.comparePassword = function(candidatePassword,hash,callback){
     });
 }
 
-//find User base on UID
+/**
+ * Find user from RFID key
+ * @param {*} RfidUID 
+ * @param {*} callback 
+ */
 module.exports.getUserByUID = function(RfidUID,callback){
     const query = {RfidUID: RifdUID}
     User.findOne(query,callback);
 }
 
-//get all User
+/**
+ * find all user 
+ * @param {*} callback 
+ */
 module.exports.getAll =  function(callback){
     User.find(callback);
 }
 
-//Update User
+/**
+ * Update user 
+ * @param {*} newUser 
+ * @param {*} callback 
+ */
 module.exports.updateUser = function(newUser,callback){
 
     const query = {username:newUser.username}
     User.findOneAndUpdate(query,{$set:{IsAdmin:newUser.IsAdmin,RfidUID: newUser.RfidUID}},callback);
-
 }
 
+/**
+ * find all user 
+ * @param {*} callback 
+ */
 module.exports.findall = function(callback){
     User.find({},callback);
 }
 
+/**
+ * Change password 
+ * @param {*} uname 
+ * @param {*} passwd 
+ * @param {*} callback 
+ */
 module.exports.changepasswd = function(uname,passwd,callback){
     bcrypt.genSalt(config.roundSalt,(err,salt)=>{
         bcrypt.hash(passwd, salt, (err, hash)=>{
