@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const randomString = require('randomstring');
 
+/**
+ * Create device Schema
+ */
 const DeviceSchema = mongoose.Schema({
     Mac:        {type: String, require: true},
     ChipSerial: {type: String, require: true},
@@ -14,38 +17,58 @@ const DeviceSchema = mongoose.Schema({
     DoorDescription:{type:String, require:false},
     UserID:     [mongoose.Schema.Types.ObjectId],
 });
-
+/**
+ * 
+ */
 const Device = module.exports = mongoose.model('device',DeviceSchema);
 
-//Add new Device
+/**
+ * Add new Device
+ * @param {*} newDevice 
+ * @param {*} callback 
+ */
 module.exports.addDevice = function(newDevice, callback){
     newDevice.save(callback);
 }
 
-//Get Device by UserID
-// module.exports.getDeviceByUserID = function(UserID,callback){
-//     const query = {UserID:UserID}
-//     Device.findOne(query,callback);
-// }
-
-//Get Device By MACAddress
+/**
+ * Get Device By Mac Address
+ * @param {*} Mac 
+ * @param {*} callback 
+ */
 module.exports.getDeviceByMac = function(Mac,callback){
     const query = {Mac:Mac}
     Device.findOne(query,callback);
 }
-//PUT ClockStatus By MacAddress
+
+/**
+ * Change Clock Status By Mac Address
+ * @param {*} Mac 
+ * @param {*} ClockStatus 
+ * @param {*} callback 
+ */
 module.exports.putClockStatusByMac = function(Mac, ClockStatus, callback){
     const query = {Mac:Mac}
     Device.findOneAndUpdate(query,{$set:{ClockStatus:ClockStatus}},callback);
 }
-//PUT DoorStatus By MacAddress
+
+/**
+ * Change Door Status By Mac Address
+ * @param {*} Mac 
+ * @param {*} DoorStatus 
+ * @param {*} callback 
+ */
 module.exports.putDoorStatusByMac = function(Mac, DoorStatus, callback){
     // console.log('doorStatus: ' + DoorStatus);
     const query = {Mac:Mac}
     Device.findOneAndUpdate(query,{$set:{DoorStatus:DoorStatus}},callback);
 }
 
-//PUT QRCode By MacAddress
+/**
+ * Generate QR code By Mac Address
+ * @param {*} Mac 
+ * @param {*} callback 
+ */
 module.exports.randomQRCodeByMac = function(Mac, callback){
     var qrgen = Mac + randomString.generate(10);
     console.log('QR Generation: '+qrgen);
@@ -53,18 +76,38 @@ module.exports.randomQRCodeByMac = function(Mac, callback){
     Device.findOneAndUpdate(query,{$set:{QRString:qrgen}},callback);
 }
 
+/**
+ * Get Device by Id
+ * @param {*} deviceId 
+ * @param {*} callback 
+ */
 module.exports.getDeviceById = function(deviceId,callback){
     Device.findById(deviceId,callback);
 }
 
+/**
+ * Update List UserID from in Device Object
+ * @param {*} userId 
+ * @param {*} deviceId 
+ * @param {*} callback 
+ */
 module.exports.updateUserIdonDevice = function(userId,deviceId,callback){
     Device.findByIdAndUpdate(deviceId,{$push:{UserID:userId}},callback);
 }
 
+/**
+ * List all device
+ * @param {*} callback 
+ */
 module.exports.findall = function(callback){
     Device.find({},callback);
 }
 
+/**
+ * Update param for device
+ * @param {*} device 
+ * @param {*} callback 
+ */
 module.exports.updateDevice = function(device, callback){
     const query = {_id:device._id}
     Device.findOneAndUpdate(query,{$set:{Mac:device.Mac,ChipSerial: device.ChipSerial,IsActive: device.IsActive,
