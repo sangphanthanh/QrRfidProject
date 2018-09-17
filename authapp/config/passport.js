@@ -19,6 +19,10 @@ passport.deserializeUser(function(id, done) {
     });
 });
 
+/**
+ * 
+ * @param {*} passport 
+ */
 module.exports = function(passport){
     var opts = {}
     opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');
