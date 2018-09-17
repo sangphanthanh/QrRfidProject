@@ -10,12 +10,10 @@ const config = require('./config/config');
 //Connect to database
 mongoose.connect(config.database, {useMongoClient: true});
 
-
 //On connection
 mongoose.connection.on('connected',()=>{
 	console.log('connected to database ' + config.database)
 });
-
 
 //On error
 mongoose.connection.on('error',(err)=>{
@@ -35,7 +33,6 @@ app.use(cors());
 
 //Static folder
 app.use(express.static(path.join(__dirname,'public')));
-
 
 //Body Parser Middleware
 app.use(bodyParser.json());
