@@ -5,7 +5,9 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 
-//Register
+/**
+ * Register
+ */
 router.post('/register',(req,res,next)=>{
 	let newUser = new User({
 		username: req.body.username,
@@ -29,7 +31,9 @@ router.post('/register',(req,res,next)=>{
 	});
 });
 
-//Authenticate
+/**
+ * Login function
+ */
 router.post('/authenticate',(req,res,next)=>{
 	const username = req.body.username;
 	const password = req.body.password;
@@ -62,19 +66,22 @@ router.post('/authenticate',(req,res,next)=>{
 	});
 });
 
-//Profile
+/**
+ * Show profile
+ */
 router.get('/profile',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
 	console.log("JSON: "+req.user);
 	res.json({user: req.user});
 });
 
-//Update user info
+/**
+ * Update user info
+ */
 router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
 	var tempUser = req.user;
 	if(tempUser.IsAdmin == true){
 		let newUser = new User({
 			username: req.body.username,
-			// password: req.body.password,
 			IsAdmin:  req.body.isAdmin,
 			RfidUID:  req.body.RfidUID
 		});
@@ -96,7 +103,10 @@ router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,re
 		return res.json({success: false, msg: 'Permission require'});
 	}
 });
-//Get List user
+
+/**
+ * Get list user 
+ */
 router.get('/listuser',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
     User.findall((err,listUser)=>{
         if(err) throw err;
@@ -108,12 +118,13 @@ router.get('/listuser',passport.authenticate('jwt',{session:false}),(req,res,nex
     });
 });
 
-//Change Passwd
+/**
+ * Change Password
+ */
 router.put('/changepasswd',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
 	var newpasswd = req.body.newpassword;
 	var oldpassword = req.body.oldpassword;
 	var username = req.user.username;
-
 	User.getUserByUsername(username,(err,user)=>{
 		if(err) throw err;
 		if(!user){
@@ -122,7 +133,6 @@ router.put('/changepasswd',passport.authenticate('jwt',{session:false}),(req,res
 		User.comparePassword(oldpassword, user.password, (err, isMatch)=>{
 			if(err) throw err;
 			if(isMatch){
-				//change password
 				User.changepasswd(user.username,newpasswd,(err,user)=>{
 					if(err) throw err;
 					if(user){

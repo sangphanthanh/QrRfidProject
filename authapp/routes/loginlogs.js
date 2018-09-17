@@ -3,6 +3,9 @@ const router = express.Router();
 const Loginlog = require('../models/loginlog');
 const passport = require('passport');
 
+/**
+ * Trace log
+ */
 router.get('/tracelog',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
     Loginlog.traceLog((err,logLog)=>{
         if(err) throw err;
@@ -13,7 +16,10 @@ router.get('/tracelog',passport.authenticate('jwt',{session:false}),(req,res,nex
         }
     });
 });
-//filter by mac
+
+/**
+ * Trace log by Mac
+ */
 router.post('/tracelogbymac',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
     var macDevice = req.body.macDevice;
     Loginlog.findByMacDevice(macDevice,(err,logLog)=>{
@@ -25,7 +31,10 @@ router.post('/tracelogbymac',passport.authenticate('jwt',{session:false}),(req,r
         }
     });
 });
-//filter by type of service
+
+/**
+ * Trace log by Service
+ */
 router.post('/tracelogbyservice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
     var service= req.body.service;
     Loginlog.findByServices(service,(err,logLog)=>{
