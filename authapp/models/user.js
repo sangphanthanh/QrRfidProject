@@ -115,3 +115,11 @@ module.exports.changepasswd = function(uname,passwd,callback){
         })
     });
 }
+/**
+ * Remove User by ID
+ * @param {*} userId 
+ * @param {*} callback 
+ */
+module.exports.removeUser = function(userId,callback){
+    User.findByIdAndRemove(userId,callback);
+}

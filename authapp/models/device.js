@@ -95,6 +95,12 @@ module.exports.updateUserIdonDevice = function(userId,deviceId,callback){
     Device.findByIdAndUpdate(deviceId,{$push:{UserID:userId}},callback);
 }
 
+/**
+ * Remove List UserID from in Device Object
+ * @param {*} userId 
+ * @param {*} deviceId 
+ * @param {*} callback 
+ */
 module.exports.removeUserIdonDevice = function(userId,deviceId,callback){
     Device.findByIdAndUpdate(deviceId,{$pull:{UserID:userId}},callback);
 }
@@ -117,4 +123,13 @@ module.exports.updateDevice = function(device, callback){
     Device.findOneAndUpdate(query,{$set:{Mac:device.Mac,ChipSerial: device.ChipSerial,IsActive: device.IsActive,
         ClockID:device.ClockID,ClockStatus: device.ClockStatus,ClockDescription: device.ClockDescription,
         DoorID: device.DoorID,DoorStatus: device.DoorStatus,DoorDescription: device.DoorDescription}},callback);
+}
+
+/**
+ * Remove ALL UserID onto Devices
+ * @param {*} userId 
+ * @param {*} callback 
+ */
+module.exports.removeUserIDOnAllDevices = function(userId,callback){
+    Device.update({},{$pull:{UserID:userId}},{multi: true},callback);
 }

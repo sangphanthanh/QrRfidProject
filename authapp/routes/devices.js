@@ -264,7 +264,6 @@ router.put('/updateUserIdOnDevice',passport.authenticate('jwt',{session:false}),
                 }
             }
             // Update userID on Device
-            console.log('Flag: '+flagUserId);
             if(flagUserId == false){
                 Device.updateUserIdonDevice(userId,deviceId,(err,device)=>{
                     if(err) throw err;
@@ -316,9 +315,9 @@ router.put('/updateDevice',passport.authenticate('jwt',{session:false}),(req,res
         });
         Device.updateDevice(newDevice,(err,device)=>{
             if(err){
-                return res.json({success: false, msg: 'Update error'});
+                return res.json({success: false, msg: 'Update fail'});
             }else{
-                return res.json({success: true, msg: 'Successful to update'});
+                return res.json({success: true, msg: 'Update successfully'});
             }
         })
 	}else{
@@ -326,6 +325,9 @@ router.put('/updateDevice',passport.authenticate('jwt',{session:false}),(req,res
 	}
 });
 
+/**
+ * Remove UserID onto Device
+ */
 router.put('/removeUserIdOnDevice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
     var userId = req.body.userID;
     var deviceId = req.body.deviceID;
@@ -343,7 +345,6 @@ router.put('/removeUserIdOnDevice',passport.authenticate('jwt',{session:false}),
                 }
             }
             // Update userID on Device
-            console.log('Flag: '+flagUserId);
             if(flagUserId == true){
                 Device.removeUserIdonDevice(userId,deviceId,(err,device)=>{
                     if(err) throw err;

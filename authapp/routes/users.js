@@ -4,6 +4,7 @@ const User = require('../models/user');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
+const Device = require('../models/device');
 
 /**
  * Register
@@ -92,9 +93,9 @@ router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,re
 			}else{
 				User.updateUser(newUser,(err,user)=>{
 					if(err){
-						return res.json({success: false, msg: 'Update Error'});
+						return res.json({success: false, msg: 'Update Fail'});
 					}else{
-						return res.json({success: true, msg: 'Update Success'});
+						return res.json({success: true, msg: 'Update successfully'});
 					}
 				})
 			}
@@ -145,4 +146,21 @@ router.put('/changepasswd',passport.authenticate('jwt',{session:false}),(req,res
 		});
 	});
 });
+
+router.post('/removeuser',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
+	var userID = req.body._id;
+	console.log('UserID: ' +userID );
+	//Check User exits in Device or not
+	Device.removeUserIDOnAllDevices(userID,(err,device)=>{
+		if(err) throw err;
+		// Remove user by UserID
+		User.removeUser(userID,(err,user)=>{
+			if(err) throw err;
+			else{
+				return res.json({success: true, msg: 'Remove successfully'});
+			}
+		})
+	})
+});
+
 module.exports = router;
