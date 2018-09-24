@@ -250,14 +250,36 @@ router.post('/CheckQRCode',passport.authenticate('jwt',{session:false}),(req,res
 router.put('/updateUserIdOnDevice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
     var userId = req.body.userID;
     var deviceId = req.body.deviceID;
-    Device.updateUserIdonDevice(userId,deviceId,(err,device)=>{
+    var flagUserId = false;
+    //Get Device Object
+    Device.getDeviceById(deviceId,(err,device)=>{
         if(err) throw err;
         if(!device){
-            res.json({Success: false , msg: 'Update fail'});
+            res.json({Success: false , msg: 'Device not found'});
         }else{
-            res.json({Success: true , msg: 'Update successfully'});
+            //Check UserID exits or not
+            for(var i = 0; i < device.UserID.length; i++){
+                if(device.UserID[i] == userId){
+                    flagUserId = true;
+                }
+            }
+            // Update userID on Device
+            console.log('Flag: '+flagUserId);
+            if(flagUserId == false){
+                Device.updateUserIdonDevice(userId,deviceId,(err,device)=>{
+                    if(err) throw err;
+                    if(!device){
+                        res.json({Success: false , msg: 'Update fail'});
+                    }else{
+                        res.json({Success: true , msg: 'Update successfully'});
+                    }
+                })
+            }else{
+                res.json({Success: false , msg: 'User Already Added'});
+            }
         }
-    })
+    });
+
 });
 
 /**
@@ -291,6 +313,7 @@ router.put('/updateDevice',passport.authenticate('jwt',{session:false}),(req,res
             DoorID:     req.body.DoorID,
             DoorStatus: req.body.DoorStatus,
             DoorDescription:req.body.DoorDescription,
+            UserID:     req.body.UserID,
         });
         Device.updateDevice(newDevice,(err,device)=>{
             if(err){
