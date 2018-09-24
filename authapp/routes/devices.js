@@ -313,7 +313,6 @@ router.put('/updateDevice',passport.authenticate('jwt',{session:false}),(req,res
             DoorID:     req.body.DoorID,
             DoorStatus: req.body.DoorStatus,
             DoorDescription:req.body.DoorDescription,
-            UserID:     req.body.UserID,
         });
         Device.updateDevice(newDevice,(err,device)=>{
             if(err){
@@ -325,6 +324,41 @@ router.put('/updateDevice',passport.authenticate('jwt',{session:false}),(req,res
 	}else{
 		return res.json({success: false, msg: 'Permission require'});
 	}
+});
+
+router.put('/removeUserIdOnDevice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
+    var userId = req.body.userID;
+    var deviceId = req.body.deviceID;
+    var flagUserId = false;
+    //Get Device Object
+    Device.getDeviceById(deviceId,(err,device)=>{
+        if(err) throw err;
+        if(!device){
+            res.json({Success: false , msg: 'Device not found'});
+        }else{
+            //Check UserID exits or not
+            for(var i = 0; i < device.UserID.length; i++){
+                if(device.UserID[i] == userId){
+                    flagUserId = true;
+                }
+            }
+            // Update userID on Device
+            console.log('Flag: '+flagUserId);
+            if(flagUserId == true){
+                Device.removeUserIdonDevice(userId,deviceId,(err,device)=>{
+                    if(err) throw err;
+                    if(!device){
+                        res.json({Success: false , msg: 'Remove fail'});
+                    }else{
+                        res.json({Success: true , msg: 'Remove successfully'});
+                    }
+                })
+            }else{
+                res.json({Success: false , msg: 'User not found'});
+            }
+        }
+    });
+
 });
 
 module.exports = router;

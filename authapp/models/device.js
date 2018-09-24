@@ -95,6 +95,10 @@ module.exports.updateUserIdonDevice = function(userId,deviceId,callback){
     Device.findByIdAndUpdate(deviceId,{$push:{UserID:userId}},callback);
 }
 
+module.exports.removeUserIdonDevice = function(userId,deviceId,callback){
+    Device.findByIdAndUpdate(deviceId,{$pull:{UserID:userId}},callback);
+}
+
 /**
  * List all device
  * @param {*} callback 
