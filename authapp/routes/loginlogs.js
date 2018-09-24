@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Loginlog = require('../models/loginlog');
 const passport = require('passport');
+const config = require('../config/config')
 
 /**
  * Trace log
@@ -10,7 +11,7 @@ router.get('/tracelog',passport.authenticate('jwt',{session:false}),(req,res,nex
     Loginlog.traceLog((err,logLog)=>{
         if(err) throw err;
         if(!logLog){
-            res.json({Success: false , msg: 'Empty'});
+            res.json({Success: false , msg: config.ST_Code04});
         }else{
             res.send(logLog);
         }
@@ -25,7 +26,7 @@ router.post('/tracelogbymac',passport.authenticate('jwt',{session:false}),(req,r
     Loginlog.findByMacDevice(macDevice,(err,logLog)=>{
         if(err) throw err;
         if(!logLog){
-            res.json({Success: false , msg: 'Empty'});
+            res.json({Success: false , msg: config.ST_Code04});
         }else{
             res.send(logLog);
         }
@@ -40,7 +41,7 @@ router.post('/tracelogbyservice',passport.authenticate('jwt',{session:false}),(r
     Loginlog.findByServices(service,(err,logLog)=>{
         if(err) throw err;
         if(!logLog){
-            res.json({Success: false , msg: 'Empty'});
+            res.json({Success: false , msg: config.ST_Code04});
         }else{
             res.send(logLog);
         }

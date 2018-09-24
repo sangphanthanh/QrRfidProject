@@ -5,6 +5,7 @@ const Device = require('../models/device');
 const User = require('../models/user');
 const randomString = require('randomstring');
 const LoginLog = require('../models/loginlog');
+const config = require('../config/config');
 
 /**
  * Router Add Device
@@ -30,18 +31,18 @@ router.post('/addDevice',passport.authenticate('jwt',{session:false}),(req,res,n
             if(!device){
                 Device.addDevice(newDevice, (err,device)=>{
                     if(err){
-                        res.json({success: false , msg: 'Fail to add new device'});
+                        res.json({success: false , msg: config.ST_Code01});
                     }else{
-                        res.json({success: true, msg: 'Added new device'});
-                        console.log("Device Mac: "+ newDevice.Mac + " has been added");
+                        res.json({success: true, msg: config.ST_Code02});
+                        // console.log("Device Mac: "+ newDevice.Mac + " has been added");
                     }
                 });
             }else{
-                res.json({success: false, msg: 'Device already added'});
+                res.json({success: false, msg: config.ST_Code03});
             }
         })
     }else{
-        res.json({success: false, msg: 'Do Not Have Permission'});
+        res.json({success: false, msg: config.ER_Code03});
     }
 });
 
@@ -52,11 +53,10 @@ router.get('/qrcode/:MACAdd',(req,res,next)=>{
     Device.getDeviceByMac(req.params.MACAdd,(err,device)=>{
         if(err) throw err;
 		if(!device){
-			return res.json({success: false, msg: 'Device not found'});
+			return res.json({success: false, msg: config.ST_Code05});
         }else{
             res.json({QRCode: device.QRString});
-            console.log('Device : '+req.params.MACAdd + ' trace QrCode: ' + device.QRString);
-            
+            // console.log('Device : '+req.params.MACAdd + ' trace QrCode: ' + device.QRString);
         }
     });
 });
@@ -71,7 +71,7 @@ router.get('/clockstatus/:MACAdd',(req,res,next)=>{
 			return res.json({success: false});
         }else{
             res.json({ClockStatus: device.ClockStatus});
-            console.log('Device : '+req.params.MACAdd+' trace ClockStatus: '+device.ClockStatus);
+            // console.log('Device : '+req.params.MACAdd+' trace ClockStatus: '+device.ClockStatus);
         }
     });
 });
@@ -86,7 +86,7 @@ router.get('/doorstatus/:MACAdd',(req,res,next)=>{
 			return res.json({success: false});
         }else{
             res.json({DoorStatus: device.DoorStatus});
-            console.log('Device : '+req.params.MACAdd+' trail DoorStatus: '+device.DoorStatus);
+            // console.log('Device : '+req.params.MACAdd+' trail DoorStatus: '+device.DoorStatus);
         }
     });
 });
@@ -103,7 +103,7 @@ router.put('/updateclockstatus/:MACAdd',(req,res,next)=>{
 			return res.json({success: false});
         }else{
             res.json({Success: true});
-            console.log('Update ClockStatus = '+newClockStatus);
+            // console.log('Update ClockStatus = '+newClockStatus);
         }
     });
     }else{
@@ -123,7 +123,7 @@ router.put('/updatedoorstatus/:MACAdd',(req,res,next)=>{
 			return res.json({success: false});
         }else{
             res.json({Success: true});
-            console.log('Update DoorStatus = '+newDoorStatus);
+            // console.log('Update DoorStatus = '+newDoorStatus);
         }
     });
     }else{
@@ -142,14 +142,14 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
         if(err) throw err;
 		if(!device){
             errFlag = true;
-            msgErr = 'Device not found';
+            msgErr = config.ST_Code05;
         }else{
             for(var i = 0; i < device.UserID.length; i++){
                 User.getUserById(device.UserID[i],(err,user)=>{
                     if(err) throw err;
                     if(!user){
                         errFlag = true;
-                        msgErr = 'User not found';
+                        msgErr = config.ST_Code06;
                     }else{
                         if(user.RfidUID === uid){
                             var newClockStatus = true;
@@ -158,11 +158,11 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
                                     if(err) throw err;
                                     if(!device){
                                         errFlag = true;
-                                        msgErr = 'Device not found';
+                                        msgErr = config.ST_Code05;
                                     }else{
                                         let loginLog = new LoginLog({
                                             Device: device.Mac,
-                                            TypeOfServices: 'RFID',
+                                            TypeOfServices: config.ST_Code07,
                                             Info:{
                                                 DoorStatus: newClockStatus,
                                                 Actor:    user.username,
@@ -172,17 +172,17 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
                                             if(err) throw err;
                                         })
                                         errFlag = false;
-                                        msgErr = 'Welcome to Adquest ';
+                                        msgErr = config.ST_Code08;
                                     }
                             })
                         }else{
                             errFlag = true;
-                            msgErr = 'Update fail';
+                            msgErr = config.ER_Code01;
                             // res.json({Success: false , msg: 'Update fail'});
                         }
                     }else{
                         errFlag = true;
-                        msgErr = 'Uid not match';
+                        msgErr = config.ST_Code09;
                         // res.json({Success: false , msg: 'Uid not match'});
                     }
                 }})
@@ -205,23 +205,23 @@ router.post('/CheckQRCode',passport.authenticate('jwt',{session:false}),(req,res
     Device.getDeviceByMac(addMac,(err,device)=>{
         if(err) throw err;
         if(!device){
-            res.json({Success: false, msg: 'Device not found'});
+            res.json({Success: false, msg: config.ST_Code05});
         }else{
             if(device.QRString == qrCheck){
                 Device.putClockStatusByMac(addMac,true,(err,device)=>{
                     if(err) throw err;
                     if(!device){
-                        return res.json({success: false, msg: 'Device not found'});
+                        return res.json({success: false, msg: config.ST_Code05});
                     }else{
                         // res.json({Success: true , msg: 'Update successfully' , ClockStatus: newClockStatus});
                         Device.randomQRCodeByMac(addMac, (err,device)=>{
                             if(err) throw err;
                             if(!device){
-                                return res.json({success: false, msg: 'Device not found'});
+                                return res.json({success: false, msg: config.ST_Code05});
                             }else{
                                 let loginLog = new LoginLog({
                                     Device: device.Mac,
-                                    TypeOfServices: 'QRScan',
+                                    TypeOfServices: config.ST_Code10,
                                     Info:{
                                         DoorStatus: true,
                                         Actor:    req.user.username,
@@ -230,13 +230,13 @@ router.post('/CheckQRCode',passport.authenticate('jwt',{session:false}),(req,res
                                 LoginLog.addLoginLog(loginLog,(err,lolog)=>{
                                     if(err) throw err;
                                 })
-                                return res.json({success: true, msg: 'Welcome to Adquest '});
+                                return res.json({success: true, msg: config.ST_Code08});
                             }
                         });
                     }
                 });
                 }else{
-                    res.json({Success: false , msg: 'Update fail'});
+                    res.json({Success: false , msg: config.ER_Code01});
                 }
             }
 
@@ -248,14 +248,14 @@ router.post('/CheckQRCode',passport.authenticate('jwt',{session:false}),(req,res
  * Update Userid from Device Object
  */
 router.put('/updateUserIdOnDevice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
-    var userId = req.body.userID;
+    var userId = req.body.userID;Code04
     var deviceId = req.body.deviceID;
     var flagUserId = false;
     //Get Device Object
     Device.getDeviceById(deviceId,(err,device)=>{
         if(err) throw err;
         if(!device){
-            res.json({Success: false , msg: 'Device not found'});
+            res.json({Success: false , msg: config.ST_Code05});
         }else{
             //Check UserID exits or not
             for(var i = 0; i < device.UserID.length; i++){
@@ -268,13 +268,13 @@ router.put('/updateUserIdOnDevice',passport.authenticate('jwt',{session:false}),
                 Device.updateUserIdonDevice(userId,deviceId,(err,device)=>{
                     if(err) throw err;
                     if(!device){
-                        res.json({Success: false , msg: 'Update fail'});
+                        res.json({Success: false , msg: config.ER_Code01});
                     }else{
-                        res.json({Success: true , msg: 'Update successfully'});
+                        res.json({Success: true , msg: config.ER_Code02});
                     }
                 })
             }else{
-                res.json({Success: false , msg: 'User Already Added'});
+                res.json({Success: false , msg: config.ST_Code11});
             }
         }
     });
@@ -288,7 +288,7 @@ router.get('/listdevice',passport.authenticate('jwt',{session:false}),(req,res,n
     Device.findall((err,listDevice)=>{
         if(err) throw err;
         if(!listDevice){
-            res.json({Success: false , msg: 'Empty'});
+            res.json({Success: false , msg: config.ST_Code05});
         }else{
             res.send(listDevice);
         }
@@ -315,13 +315,13 @@ router.put('/updateDevice',passport.authenticate('jwt',{session:false}),(req,res
         });
         Device.updateDevice(newDevice,(err,device)=>{
             if(err){
-                return res.json({success: false, msg: 'Update fail'});
+                return res.json({success: false, msg: config.ER_Code01});
             }else{
-                return res.json({success: true, msg: 'Update successfully'});
+                return res.json({success: true, msg: config.ER_Code02});
             }
         })
 	}else{
-		return res.json({success: false, msg: 'Permission require'});
+		return res.json({success: false, msg: config.ER_Code03});
 	}
 });
 
@@ -336,7 +336,7 @@ router.put('/removeUserIdOnDevice',passport.authenticate('jwt',{session:false}),
     Device.getDeviceById(deviceId,(err,device)=>{
         if(err) throw err;
         if(!device){
-            res.json({Success: false , msg: 'Device not found'});
+            res.json({Success: false , msg: config.ST_Code05});
         }else{
             //Check UserID exits or not
             for(var i = 0; i < device.UserID.length; i++){
@@ -349,13 +349,13 @@ router.put('/removeUserIdOnDevice',passport.authenticate('jwt',{session:false}),
                 Device.removeUserIdonDevice(userId,deviceId,(err,device)=>{
                     if(err) throw err;
                     if(!device){
-                        res.json({Success: false , msg: 'Remove fail'});
+                        res.json({Success: false , msg: config.ER_Code04});
                     }else{
-                        res.json({Success: true , msg: 'Remove successfully'});
+                        res.json({Success: true , msg: config.ER_Code05});
                     }
                 })
             }else{
-                res.json({Success: false , msg: 'User not found'});
+                res.json({Success: false , msg: config.ST_Code06});
             }
         }
     });

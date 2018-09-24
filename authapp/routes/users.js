@@ -21,13 +21,13 @@ router.post('/register',(req,res,next)=>{
 		if(!user){
 			User.addUser(newUser,(err,user)=>{
 				if(err){
-					res.json({success: false, msg: 'Fail to register'+ err});	
+					res.json({success: false, msg: config.ST_Code12});	
 				}else{
-					res.json({success: true, msg: 'User registered'});
+					res.json({success: true, msg: config.ST_Code13});
 				}
 				});
 		}else{
-			res.json({success: false, msg: 'Username already added'});	
+			res.json({success: false, msg: config.ST_Code11});	
 		}
 	});
 });
@@ -42,7 +42,7 @@ router.post('/authenticate',(req,res,next)=>{
 	User.getUserByUsername(username,(err,user)=>{
 		if(err) throw err;
 		if(!user){
-			return res.json({success: false, msg: 'User not found'});
+			return res.json({success: false, msg: config.ST_Code06});
 		}
 		User.comparePassword(password, user.password, (err, isMatch)=>{
 			if(err) throw err;
@@ -61,7 +61,7 @@ router.post('/authenticate',(req,res,next)=>{
 					}
 				});
 			}else{
-				return res.json({success: false, msg: 'Wrong password'});
+				return res.json({success: false, msg: config.ST_Code14});
 			}
 		});
 	});
@@ -71,7 +71,7 @@ router.post('/authenticate',(req,res,next)=>{
  * Show profile
  */
 router.get('/profile',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
-	console.log("JSON: "+req.user);
+	// console.log("JSON: "+req.user);
 	res.json({user: req.user});
 });
 
@@ -89,19 +89,19 @@ router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,re
 		User.getUserByUsername(newUser.username,(err,user)=>{
 			if(err) throw err;
 			if(!user){
-				return res.json({success: false, msg: 'User not found'});
+				return res.json({success: false, msg: config.ST_Code06});
 			}else{
 				User.updateUser(newUser,(err,user)=>{
 					if(err){
-						return res.json({success: false, msg: 'Update Fail'});
+						return res.json({success: false, msg: config.ER_Code01});
 					}else{
-						return res.json({success: true, msg: 'Update successfully'});
+						return res.json({success: true, msg: config.ER_Code02});
 					}
 				})
 			}
 		});
 	}else{
-		return res.json({success: false, msg: 'Permission require'});
+		return res.json({success: false, msg: config.ER_Code03});
 	}
 });
 
@@ -112,7 +112,7 @@ router.get('/listuser',passport.authenticate('jwt',{session:false}),(req,res,nex
     User.findall((err,listUser)=>{
         if(err) throw err;
         if(!listUser){
-            res.json({Success: false , msg: 'Empty'});
+            res.json({Success: false , msg: config.ST_Code06});
         }else{
             res.send(listUser);
         }
@@ -129,7 +129,7 @@ router.put('/changepasswd',passport.authenticate('jwt',{session:false}),(req,res
 	User.getUserByUsername(username,(err,user)=>{
 		if(err) throw err;
 		if(!user){
-			return res.json({success: false, msg: 'User not found'});
+			return res.json({success: false, msg: config.ST_Code06});
 		}
 		User.comparePassword(oldpassword, user.password, (err, isMatch)=>{
 			if(err) throw err;
@@ -137,16 +137,20 @@ router.put('/changepasswd',passport.authenticate('jwt',{session:false}),(req,res
 				User.changepasswd(user.username,newpasswd,(err,user)=>{
 					if(err) throw err;
 					if(user){
-						return res.json({success: true, msg: 'Password has been change'});
+						return res.json({success: true, msg: config.ST_Code15});
 					}
 				})
 			}else{
-				return res.json({success: false, msg: 'Wrong password'});
+				return res.json({success: false, msg: config.ST_Code14});
 			}
 		});
 	});
 });
 
+/**
+ * Delete user
+ * Param: userID (request.body._id)
+ */
 router.post('/removeuser',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
 	var userID = req.body._id;
 	console.log('UserID: ' +userID );
@@ -157,7 +161,7 @@ router.post('/removeuser',passport.authenticate('jwt',{session:false}),(req,res,
 		User.removeUser(userID,(err,user)=>{
 			if(err) throw err;
 			else{
-				return res.json({success: true, msg: 'Remove successfully'});
+				return res.json({success: true, msg: config.ER_Code05});
 			}
 		})
 	})
