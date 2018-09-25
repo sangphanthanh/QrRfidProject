@@ -60,7 +60,7 @@ module.exports.findByServices = function(service,callback){
  */
 module.exports.system_log = function(msg,callback){
     var datetime = new Date();
-    var file = 'authapp.log';
+    var file = 'authapp_system_log.txt';
     var text = '['+ datetime+'] '+msg+'\r\n';
     fs.appendFile(file,text,function(err){
         if(err) throw err;
