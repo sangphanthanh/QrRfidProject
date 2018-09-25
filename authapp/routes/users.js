@@ -25,7 +25,7 @@ router.post('/register',(req,res,next)=>{
 					res.json({success: false, msg: config.ST_Code12});	
 				}else{
 					res.json({success: true, msg: config.ST_Code13});
-					loginlog.system_log(username + ' ::: ' +config.ST_Code13);
+					// loginlog.system_log(username + ' ::: ' +config.ST_Code13);
 				}
 				});
 		}else{
@@ -62,7 +62,7 @@ router.post('/authenticate',(req,res,next)=>{
 						RfidUID: user.RfidUID
 					}
 				});
-				loginlog.system_log(username + ' ::: authenticated');
+				// loginlog.system_log(username + ' ::: authenticated');
 			}else{
 				return res.json({success: false, msg: config.ST_Code14});
 			}
@@ -98,7 +98,7 @@ router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,re
 					if(err){
 						return res.json({success: false, msg: config.ER_Code01});
 					}else{
-						loginlog.system_log(username + ' ::: update profile');
+						// loginlog.system_log(username + ' ::: update profile');
 						return res.json({success: true, msg: config.ER_Code02});
 					}
 				})
@@ -141,7 +141,7 @@ router.put('/changepasswd',passport.authenticate('jwt',{session:false}),(req,res
 				User.changepasswd(user.username,newpasswd,(err,user)=>{
 					if(err) throw err;
 					if(user){
-						loginlog.system_log(username + ' ::: '+config.ST_Code15);
+						// loginlog.system_log(username + ' ::: '+config.ST_Code15);
 						return res.json({success: true, msg: config.ST_Code15});
 					}
 				})
@@ -166,7 +166,7 @@ router.post('/removeuser',passport.authenticate('jwt',{session:false}),(req,res,
 		User.removeUser(userID,(err,user)=>{
 			if(err) throw err;
 			else{
-				loginlog.system_log(_id + ' ::: '+config.ER_Code05);
+				// loginlog.system_log(_id + ' ::: '+config.ER_Code05);
 				return res.json({success: true, msg: config.ER_Code05});
 			}
 		})
