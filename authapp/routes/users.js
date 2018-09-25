@@ -5,6 +5,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 const Device = require('../models/device');
+const loginlog = require('../models/loginlog');
 
 /**
  * Register
@@ -24,6 +25,7 @@ router.post('/register',(req,res,next)=>{
 					res.json({success: false, msg: config.ST_Code12});	
 				}else{
 					res.json({success: true, msg: config.ST_Code13});
+					loginlog.system_log(username + ' ::: ' +config.ST_Code13);
 				}
 				});
 		}else{
@@ -60,6 +62,7 @@ router.post('/authenticate',(req,res,next)=>{
 						RfidUID: user.RfidUID
 					}
 				});
+				loginlog.system_log(username + ' ::: authenticated');
 			}else{
 				return res.json({success: false, msg: config.ST_Code14});
 			}
@@ -95,6 +98,7 @@ router.put('/updateprofile',passport.authenticate('jwt',{session:false}),(req,re
 					if(err){
 						return res.json({success: false, msg: config.ER_Code01});
 					}else{
+						loginlog.system_log(username + ' ::: update profile');
 						return res.json({success: true, msg: config.ER_Code02});
 					}
 				})
@@ -137,6 +141,7 @@ router.put('/changepasswd',passport.authenticate('jwt',{session:false}),(req,res
 				User.changepasswd(user.username,newpasswd,(err,user)=>{
 					if(err) throw err;
 					if(user){
+						loginlog.system_log(username + ' ::: '+config.ST_Code15);
 						return res.json({success: true, msg: config.ST_Code15});
 					}
 				})
@@ -153,14 +158,15 @@ router.put('/changepasswd',passport.authenticate('jwt',{session:false}),(req,res
  */
 router.post('/removeuser',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
 	var userID = req.body._id;
-	console.log('UserID: ' +userID );
 	//Check User exits in Device or not
+	console.log('UserID: ' +userID );
 	Device.removeUserIDOnAllDevices(userID,(err,device)=>{
 		if(err) throw err;
 		// Remove user by UserID
 		User.removeUser(userID,(err,user)=>{
 			if(err) throw err;
 			else{
+				loginlog.system_log(_id + ' ::: '+config.ER_Code05);
 				return res.json({success: true, msg: config.ER_Code05});
 			}
 		})
