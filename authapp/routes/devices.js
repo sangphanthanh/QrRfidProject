@@ -248,7 +248,7 @@ router.post('/CheckQRCode',passport.authenticate('jwt',{session:false}),(req,res
  * Update Userid from Device Object
  */
 router.put('/updateUserIdOnDevice',passport.authenticate('jwt',{session:false}),(req,res,next)=>{
-    var userId = req.body.userID;Code04
+    var userId = req.body.userID;
     var deviceId = req.body.deviceID;
     var flagUserId = false;
     //Get Device Object
