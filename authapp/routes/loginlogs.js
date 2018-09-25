@@ -11,7 +11,7 @@ router.get('/tracelog',passport.authenticate('jwt',{session:false}),(req,res,nex
     Loginlog.traceLog((err,logLog)=>{
         if(err) throw err;
         if(!logLog){
-            res.json({Success: false , msg: config.ST_Code04});
+            res.json({success: false , msg: config.ST_Code04});
         }else{
             res.send(logLog);
         }
@@ -26,7 +26,7 @@ router.post('/tracelogbymac',passport.authenticate('jwt',{session:false}),(req,r
     Loginlog.findByMacDevice(macDevice,(err,logLog)=>{
         if(err) throw err;
         if(!logLog){
-            res.json({Success: false , msg: config.ST_Code04});
+            res.json({success: false , msg: config.ST_Code04});
         }else{
             res.send(logLog);
         }
@@ -41,7 +41,7 @@ router.post('/tracelogbyservice',passport.authenticate('jwt',{session:false}),(r
     Loginlog.findByServices(service,(err,logLog)=>{
         if(err) throw err;
         if(!logLog){
-            res.json({Success: false , msg: config.ST_Code04});
+            res.json({success: false , msg: config.ST_Code04});
         }else{
             res.send(logLog);
         }

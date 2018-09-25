@@ -102,12 +102,12 @@ router.put('/updateclockstatus/:MACAdd',(req,res,next)=>{
 		if(!device){
 			return res.json({success: false});
         }else{
-            res.json({Success: true});
+            res.json({success: true});
             // console.log('Update ClockStatus = '+newClockStatus);
         }
     });
     }else{
-        res.json({Success: false});
+        res.json({success: false});
     }
 });
 
@@ -122,12 +122,12 @@ router.put('/updatedoorstatus/:MACAdd',(req,res,next)=>{
 		if(!device){
 			return res.json({success: false});
         }else{
-            res.json({Success: true});
+            res.json({success: true});
             // console.log('Update DoorStatus = '+newDoorStatus);
         }
     });
     }else{
-        res.json({Success: false});
+        res.json({success: false});
     }
 });
 
@@ -189,9 +189,9 @@ router.put('/openclockonuid/:MACAdd',(req,res,next)=>{
             }
         }
         if(errFlag==true){
-            res.json({Success: false});
+            res.json({success: false});
         }else{
-            res.json({Success: true});
+            res.json({success: true});
         }
     });
 });
@@ -205,7 +205,7 @@ router.post('/CheckQRCode',passport.authenticate('jwt',{session:false}),(req,res
     Device.getDeviceByMac(addMac,(err,device)=>{
         if(err) throw err;
         if(!device){
-            res.json({Success: false, msg: config.ST_Code05});
+            res.json({success: false, msg: config.ST_Code05});
         }else{
             if(device.QRString == qrCheck){
                 Device.putClockStatusByMac(addMac,true,(err,device)=>{
@@ -236,7 +236,7 @@ router.post('/CheckQRCode',passport.authenticate('jwt',{session:false}),(req,res
                     }
                 });
                 }else{
-                    res.json({Success: false , msg: config.ER_Code01});
+                    res.json({success: false , msg: config.ER_Code01});
                 }
             }
 
@@ -255,7 +255,7 @@ router.put('/updateUserIdOnDevice',passport.authenticate('jwt',{session:false}),
     Device.getDeviceById(deviceId,(err,device)=>{
         if(err) throw err;
         if(!device){
-            res.json({Success: false , msg: config.ST_Code05});
+            res.json({success: false , msg: config.ST_Code05});
         }else{
             //Check UserID exits or not
             for(var i = 0; i < device.UserID.length; i++){
@@ -268,13 +268,13 @@ router.put('/updateUserIdOnDevice',passport.authenticate('jwt',{session:false}),
                 Device.updateUserIdonDevice(userId,deviceId,(err,device)=>{
                     if(err) throw err;
                     if(!device){
-                        res.json({Success: false , msg: config.ER_Code01});
+                        res.json({success: false , msg: config.ER_Code01});
                     }else{
-                        res.json({Success: true , msg: config.ER_Code02});
+                        res.json({success: true , msg: config.ER_Code02});
                     }
                 })
             }else{
-                res.json({Success: false , msg: config.ST_Code11});
+                res.json({success: false , msg: config.ST_Code11});
             }
         }
     });
@@ -288,7 +288,7 @@ router.get('/listdevice',passport.authenticate('jwt',{session:false}),(req,res,n
     Device.findall((err,listDevice)=>{
         if(err) throw err;
         if(!listDevice){
-            res.json({Success: false , msg: config.ST_Code05});
+            res.json({success: false , msg: config.ST_Code05});
         }else{
             res.send(listDevice);
         }
@@ -336,7 +336,7 @@ router.put('/removeUserIdOnDevice',passport.authenticate('jwt',{session:false}),
     Device.getDeviceById(deviceId,(err,device)=>{
         if(err) throw err;
         if(!device){
-            res.json({Success: false , msg: config.ST_Code05});
+            res.json({success: false , msg: config.ST_Code05});
         }else{
             //Check UserID exits or not
             for(var i = 0; i < device.UserID.length; i++){
@@ -349,13 +349,13 @@ router.put('/removeUserIdOnDevice',passport.authenticate('jwt',{session:false}),
                 Device.removeUserIdonDevice(userId,deviceId,(err,device)=>{
                     if(err) throw err;
                     if(!device){
-                        res.json({Success: false , msg: config.ER_Code04});
+                        res.json({success: false , msg: config.ER_Code04});
                     }else{
-                        res.json({Success: true , msg: config.ER_Code05});
+                        res.json({success: true , msg: config.ER_Code05});
                     }
                 })
             }else{
-                res.json({Success: false , msg: config.ST_Code06});
+                res.json({success: false , msg: config.ST_Code06});
             }
         }
     });

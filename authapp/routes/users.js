@@ -116,7 +116,7 @@ router.get('/listuser',passport.authenticate('jwt',{session:false}),(req,res,nex
     User.findall((err,listUser)=>{
         if(err) throw err;
         if(!listUser){
-            res.json({Success: false , msg: config.ST_Code06});
+            res.json({success: false , msg: config.ST_Code06});
         }else{
             res.send(listUser);
         }
