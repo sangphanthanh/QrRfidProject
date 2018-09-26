@@ -4,7 +4,7 @@ module.exports = {
 	port: '8000',
 	TokenTime: '7d',
 	roundSalt: 10, //set salt 10 round for bcrypt
-
+	defaultpassdwd : '04070407',
 	//  STATUS CODE
 	ST_Code01: 'Fail to add new device',
 	ST_Code02: 'Added new device',
@@ -21,6 +21,7 @@ module.exports = {
 	ST_Code13: 'User registered',
 	ST_Code14: 'Wrong password',
 	ST_Code15: 'Password has been change',
+	ST_Code16: 'Password has been reset',
 
 
 	// ERROR CODE
