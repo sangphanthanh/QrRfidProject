@@ -133,3 +133,12 @@ module.exports.updateDevice = function(device, callback){
 module.exports.removeUserIDOnAllDevices = function(userId,callback){
     Device.update({},{$pull:{UserID:userId}},{multi: true},callback);
 }
+
+/**
+ * Delete Device
+ * @param {deviceID} deviceId 
+ * @param {*} callback 
+ */
+module.exports.removeDevice = function(deviceId, callback){
+    Device.findByIdAndRemove(deviceId,callback);
+}

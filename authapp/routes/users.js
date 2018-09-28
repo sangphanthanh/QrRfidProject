@@ -13,7 +13,7 @@ const loginlog = require('../models/loginlog');
 router.post('/register', (req, res, next) => {
 	let newUser = new User({
 		username: req.body.username,
-		password: req.body.password,
+		password: config.defaultpassdwd,
 		IsAdmin: req.body.isAdmin,
 		RfidUID: req.body.RfidUID
 	});
@@ -200,7 +200,9 @@ router.put('/changepasswd', passport.authenticate('jwt', {
 		});
 	});
 });
-
+/**
+ * Reset password
+ */
 router.put('/resetpasswd', passport.authenticate('jwt', {
 	session: false
 }), (req, res, next) => {
