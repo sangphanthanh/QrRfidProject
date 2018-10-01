@@ -27,7 +27,12 @@ router.post('/addDevice', passport.authenticate('jwt', {
             DoorDescription: req.body.DoorDescription,
             UserID: req.body.UserID
         });
-        newDevice.QRString = newDevice.Mac + randomString.generate(10);
+        //QR Random Gen 
+        //newDevice.QRString = newDevice.Mac + randomString.generate(10);
+
+        //QR Gen on MAC + ChipSerial 
+        newDevice.QRString = newDevice.Mac + newDevice.ChipSerial;
+        
         var tempDevice = Device.getDeviceByMac(newDevice.Mac, (err, device) => {
             if (err) throw err;
             if (!device) {
@@ -266,14 +271,14 @@ router.post('/CheckQRCode', passport.authenticate('jwt', {
                         });
                     } else {
                         // res.json({Success: true , msg: 'Update successfully' , ClockStatus: newClockStatus});
-                        Device.randomQRCodeByMac(addMac, (err, device) => {
-                            if (err) throw err;
-                            if (!device) {
-                                return res.json({
-                                    success: false,
-                                    msg: config.ST_Code05
-                                });
-                            } else {
+                        // Device.randomQRCodeByMac(addMac, (err, device) => {
+                        //     if (err) throw err;
+                        //     if (!device) {
+                        //         return res.json({
+                        //             success: false,
+                        //             msg: config.ST_Code05
+                        //         });
+                        //     } else {
                                 let loginLog = new LoginLog({
                                     Device: device.Mac,
                                     TypeOfServices: config.ST_Code10,
@@ -289,8 +294,8 @@ router.post('/CheckQRCode', passport.authenticate('jwt', {
                                     success: true,
                                     msg: config.ST_Code08
                                 });
-                            }
-                        });
+                        //     }
+                        // });
                     }
                 });
             } else {
