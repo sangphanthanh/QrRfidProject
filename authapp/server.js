@@ -22,6 +22,7 @@ const app = express();
 const users = require('./routes/users');
 const devices = require('./routes/devices');
 const loginlogs = require('./routes/loginlogs');
+const doorlogs = require('./routes/doorlogs');
 
 //port number
 const port = config.port;
@@ -37,6 +38,7 @@ app.use(bodyParser.json());
 app.use('/users',users);
 app.use('/devices',devices);
 app.use('/loginlogs',loginlogs);
+app.use('/doorlogs',doorlogs);
 
 //Passport Middleware
 app.use(passport.initialize());

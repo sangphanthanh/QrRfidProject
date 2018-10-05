@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Loginlog = require('../models/loginlog');
 const passport = require('passport');
-const config = require('../config/config')
+const config = require('../config/config');
 
 /**
  * Trace log

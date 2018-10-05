@@ -17,8 +17,17 @@ const DoorLog = module.exports = mongoose.model('doorlog',DoorLogSchema);
  * @param {*} newLog 
  * @param {*} callback 
  */
-module.exports.addDoorLog = function(newLog, callback){
+module.exports.addDoorLog = function(doorLog, callback){
     var day = new Date();
-    newLog.Info.Timestamp = day;
-    newLog.save(callback);
+    doorLog.Timestamp = day;
+    doorLog.save(callback);
+}
+
+
+/**
+ * Show Log
+ * @param {*} callback 
+ */
+module.exports.traceLog = function(callback){
+    DoorLog.find(callback);
 }
