@@ -6,6 +6,10 @@ const User = require('../models/user');
 const randomString = require('randomstring');
 const LoginLog = require('../models/loginlog');
 const config = require('../config/config');
+const DoorLog = require('../models/doorlog');
+
+//
+var lastDoorStatus = false;
 
 /**
  * Router Add Device
@@ -162,6 +166,16 @@ router.put('/updatedoorstatus/:MACAdd', (req, res, next) => {
                     success: false
                 });
             } else {
+                if(newDoorStatus != lastDoorStatus){
+                    let doorLog = new DoorLog({
+                        Device: device.Mac,
+                        DoorStatus: newClockStatus,
+                    })
+                    DoorLog.addDoorLog(doorLog, (err, lolog) => {
+                        if (err) throw err;
+                    })
+                    lastDoorStatus = newDoorStatus;
+                }
                 res.json({
                     success: true
                 });
