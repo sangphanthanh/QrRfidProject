@@ -7,9 +7,10 @@ const randomString = require('randomstring');
 const LoginLog = require('../models/loginlog');
 const config = require('../config/config');
 const DoorLog = require('../models/doorlog');
-
+const HashMap = require('hashmap');
+var map = new HashMap();
 //
-var lastDoorStatus = false;
+// var lastDoorStatus = false;
 
 /**
  * Router Add Device
@@ -166,18 +167,21 @@ router.put('/updatedoorstatus/:MACAdd', (req, res, next) => {
                     success: false
                 });
             } else {
+                if((map.get(req.params.MACAdd))==null){
+                    map.set(req.params.MACAdd,newDoorStatus);
+                }
                 // console.log('Doorstt: '+ newDoorStatus + 'lastStt: '+lastDoorStatus);
-                // if(currentDoor != lastDoorStatus){
-                    // console.log('Stay here');
-                    // let doorLog = new DoorLog({
-                    //     Device: device.Mac,
-                    //     DoorStatus: newDoorStatus,
-                    // })
-                    // DoorLog.addDoorLog(doorLog, (err, lolog) => {
-                    //     if (err) throw err;
-                    // })
-                    // lastDoorStatus = newDoorStatus;
-                // }
+                if(newDoorStatus != (map.get(req.params.MACAdd))){
+                    console.log('Stay here');
+                    let doorLog = new DoorLog({
+                        Device: device.Mac,
+                        DoorStatus: newDoorStatus,
+                    })
+                    DoorLog.addDoorLog(doorLog, (err, lolog) => {
+                        if (err) throw err;
+                    })
+                    map.set(req.params.MACAdd,newDoorStatus);
+                }
                 res.json({
                     success: true
                 });
