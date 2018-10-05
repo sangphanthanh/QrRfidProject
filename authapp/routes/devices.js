@@ -115,19 +115,6 @@ router.get('/doorstatus/:MACAdd', (req, res, next) => {
                 success: false
             });
         } else {
-            if(device.DoorStatus == true){
-                let loginLog = new LoginLog({
-                    Device: req.params.MACAdd,
-                    TypeOfServices: config.ST_Code17,
-                    Info: {
-                        DoorStatus: device.DoorStatus,
-                        Actor: config.ST_Code17,
-                    }
-                })
-                LoginLog.addLoginLog(loginLog, (err, lolog) => {
-                    if (err) throw err;
-                })
-            }
             res.json({
                 DoorStatus: device.DoorStatus
             });
