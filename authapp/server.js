@@ -7,7 +7,7 @@ const mongoose =require('mongoose');
 const config = require('./config/config');
 //Connect to database
 mongoose.connect(config.database, {useMongoClient: true});
-
+mongoose.set('useCreateIndex', true);
 //On connection
 mongoose.connection.on('connected',()=>{
 	console.log('connected to database ' + config.database)

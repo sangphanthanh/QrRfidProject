@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const config = require('../config/config');
 
 /**
  * Schema Door Status
@@ -9,6 +9,7 @@ const DoorLogSchema = mongoose.Schema({
     DoorStatus: {type: Boolean, require: true},
     Timestamp:  {type: String, require: true},
     Note:  {type: String, require: true},
+    createdAt: { type: Date, expires: config.expiresdoorlog, default: Date.now }
 });
 
 const DoorLog = module.exports = mongoose.model('doorlog',DoorLogSchema);
