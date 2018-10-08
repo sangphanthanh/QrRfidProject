@@ -172,10 +172,11 @@ router.put('/updatedoorstatus/:MACAdd', (req, res, next) => {
                 }
                 // console.log('Doorstt: '+ newDoorStatus + 'lastStt: '+lastDoorStatus);
                 if(newDoorStatus != (map.get(req.params.MACAdd))){
-                    console.log('Stay here');
+                    // console.log('Stay here');
                     let doorLog = new DoorLog({
                         Device: device.Mac,
                         DoorStatus: newDoorStatus,
+                        Note: device.DoorDescription,
                     })
                     DoorLog.addDoorLog(doorLog, (err, lolog) => {
                         if (err) throw err;
