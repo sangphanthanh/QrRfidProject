@@ -37,7 +37,7 @@ router.post('/addDevice', passport.authenticate('jwt', {
 
         //QR Gen on MAC + ChipSerial 
         newDevice.QRString = newDevice.Mac + newDevice.ChipSerial;
-        
+
         var tempDevice = Device.getDeviceByMac(newDevice.Mac, (err, device) => {
             if (err) throw err;
             if (!device) {
@@ -81,11 +81,15 @@ router.get('/qrcode/:MACAdd', (req, res, next) => {
                 success: false,
                 msg: config.ST_Code05
             });
-        } else {
+        } else if (device.IsActive == true) {
             res.json({
                 QRCode: device.QRString
             });
             // console.log('Device : '+req.params.MACAdd + ' trace QrCode: ' + device.QRString);
+        } else {
+            res.json({
+                success: false
+            });
         }
     });
 });
@@ -100,11 +104,15 @@ router.get('/clockstatus/:MACAdd', (req, res, next) => {
             return res.json({
                 success: false
             });
-        } else {
+        } else if (device.IsActive == true) {
             res.json({
                 ClockStatus: device.ClockStatus
             });
             // console.log('Device : '+req.params.MACAdd+' trace ClockStatus: '+device.ClockStatus);
+        } else {
+            res.json({
+                success: false
+            });
         }
     });
 });
@@ -119,11 +127,15 @@ router.get('/doorstatus/:MACAdd', (req, res, next) => {
             return res.json({
                 success: false
             });
-        } else {
+        } else if (device.IsActive == true) {
             res.json({
                 DoorStatus: device.DoorStatus
             });
             // console.log('Device : '+req.params.MACAdd+' trail DoorStatus: '+device.DoorStatus);
+        } else {
+            res.json({
+                success: false
+            });
         }
     });
 });
@@ -140,11 +152,15 @@ router.put('/updateclockstatus/:MACAdd', (req, res, next) => {
                 return res.json({
                     success: false
                 });
-            } else {
+            } else if (device.IsActive == true) {
                 res.json({
                     success: true
                 });
                 // console.log('Update ClockStatus = '+newClockStatus);
+            } else {
+                res.json({
+                    success: false
+                });
             }
         });
     } else {
@@ -166,12 +182,12 @@ router.put('/updatedoorstatus/:MACAdd', (req, res, next) => {
                 return res.json({
                     success: false
                 });
-            } else {
-                if((map.get(req.params.MACAdd))==null){
-                    map.set(req.params.MACAdd,newDoorStatus);
+            } else if (device.IsActive == true) {
+                if ((map.get(req.params.MACAdd)) == null) {
+                    map.set(req.params.MACAdd, newDoorStatus);
                 }
                 // console.log('Doorstt: '+ newDoorStatus + 'lastStt: '+lastDoorStatus);
-                if(newDoorStatus != (map.get(req.params.MACAdd))){
+                if (newDoorStatus != (map.get(req.params.MACAdd))) {
                     // console.log('Stay here');
                     let doorLog = new DoorLog({
                         Device: device.Mac,
@@ -181,12 +197,16 @@ router.put('/updatedoorstatus/:MACAdd', (req, res, next) => {
                     DoorLog.addDoorLog(doorLog, (err, lolog) => {
                         if (err) throw err;
                     })
-                    map.set(req.params.MACAdd,newDoorStatus);
+                    map.set(req.params.MACAdd, newDoorStatus);
                 }
                 res.json({
                     success: true
                 });
                 // console.log('Update DoorStatus = '+newDoorStatus);
+            } else {
+                res.json({
+                    success: false
+                });
             }
         });
     } else {
@@ -208,7 +228,7 @@ router.put('/openclockonuid/:MACAdd', (req, res, next) => {
         if (!device) {
             errFlag = true;
             msgErr = config.ST_Code05;
-        } else {
+        } else if (device.IsActive == true) {
             for (var i = 0; i < device.UserID.length; i++) {
                 User.getUserById(device.UserID[i], (err, user) => {
                     if (err) throw err;
@@ -253,6 +273,8 @@ router.put('/openclockonuid/:MACAdd', (req, res, next) => {
                     }
                 })
             }
+        } else {
+            errFlag == true;
         }
         if (errFlag == true) {
             res.json({
@@ -300,21 +322,21 @@ router.post('/CheckQRCode', passport.authenticate('jwt', {
                         //             msg: config.ST_Code05
                         //         });
                         //     } else {
-                                let loginLog = new LoginLog({
-                                    Device: device.Mac,
-                                    TypeOfServices: config.ST_Code10,
-                                    Info: {
-                                        DoorStatus: true,
-                                        Actor: req.user.username,
-                                    }
-                                })
-                                LoginLog.addLoginLog(loginLog, (err, lolog) => {
-                                    if (err) throw err;
-                                })
-                                return res.json({
-                                    success: true,
-                                    msg: config.ST_Code08
-                                });
+                        let loginLog = new LoginLog({
+                            Device: device.Mac,
+                            TypeOfServices: config.ST_Code10,
+                            Info: {
+                                DoorStatus: true,
+                                Actor: req.user.username,
+                            }
+                        })
+                        LoginLog.addLoginLog(loginLog, (err, lolog) => {
+                            if (err) throw err;
+                        })
+                        return res.json({
+                            success: true,
+                            msg: config.ST_Code08
+                        });
                         //     }
                         // });
                     }
