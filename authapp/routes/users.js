@@ -86,6 +86,60 @@ router.post('/authenticate', (req, res, next) => {
 });
 
 /**
+ * Type 2 Authenticate
+ * Add check login attemps
+ */
+router.post('/authen', (req, res, next) => {
+	const username = req.body.username;
+	const password = req.body.password;
+
+	User.getAuthenticated(username, password, function (err, user, reason) {
+		if (err) throw err;
+
+		//login was successful if we have a user
+		if (user) {
+			const token = jwt.sign(user.toJSON(), config.secret, {
+				expiresIn: config.TokenTime
+			});
+			res.json({
+				success: true,
+				token: "JWT " + token,
+				user: {
+					id: user._id,
+					username: user.username,
+					IsAdmin: user.IsAdmin,
+					RfidUID: user.RfidUID
+				}
+			});
+		}
+
+		//otherwise we can determind why we failed
+		var reasons = User.failedLogin;
+		switch (reason) {
+			case reasons.NOT_FOUND:
+				res.json({
+					success: false,
+					msg: config.ST_Code06
+				});
+				break;
+			case reasons.PASSWORD_INCORRECT:
+				res.json({
+					success: false,
+					msg: config.ST_Code14
+				});
+				break;
+			case reasons.MAX_ATTEMPTS:
+				res.json({
+					success: false,
+					msg: config.ST_Code18
+				});
+				break;
+		}
+	})
+})
+
+
+/**
  * Show profile
  */
 router.get('/profile', passport.authenticate('jwt', {

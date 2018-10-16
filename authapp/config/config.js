@@ -6,6 +6,11 @@ module.exports = {
 	roundSalt: 10, //set salt 10 round for bcrypt
 	defaultpassdwd : '04070407',
 	expiresdoorlog: '7d',
+	// these values can be whatever you want - we're defaulting to a
+    // max of 5 attempts, resulting in a 2 hour lock
+	MAX_LOGIN_ATTEMPTS: 5,
+	LOCK_TIME: 2 * 60 * 60 * 1000,
+	SALT_WORK_FACTOR: 10,
 	//  STATUS CODE
 	ST_Code01: 'Fail to add new device',
 	ST_Code02: 'Added new device',
@@ -24,7 +29,7 @@ module.exports = {
 	ST_Code15: 'Password has been change',
 	ST_Code16: 'Password has been reset',
 	ST_Code17: 'External Actor',
-
+	ST_Code18: 'Max Attempts',
 
 	// ERROR CODE
 	ER_Code01: 'Update fail',
