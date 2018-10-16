@@ -200,7 +200,7 @@ module.exports.changepasswd = function(uname,passwd,callback){
             if(err) throw err;
             passwd = hash;
             const query = {username:uname}
-            User.findOneAndUpdate(query,{$set:{password:passwd}},callback);
+            User.findOneAndUpdate(query,{$set:{password:passwd, loginAttempts: 0}, $unset: { lockUntil: 1 }},callback);
         })
     });
 }

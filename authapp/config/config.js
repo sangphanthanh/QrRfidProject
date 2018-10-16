@@ -36,5 +36,9 @@ module.exports = {
 	ER_Code02: 'Update successfully',
 	ER_Code03: 'Permission require',
 	ER_Code04: 'Remove fail',
-	ER_Code05: 'Remove successfully'
+	ER_Code05: 'Remove successfully',
+
+	//MALLER_Config
+	MAILLER_CONF_USERNAME: 'adquestasia.kelvin@gmail.com',
+	MAILLER_CONF_PASSWORD: 'Adquest!@#123'
 }
