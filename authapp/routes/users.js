@@ -46,7 +46,7 @@ router.post('/register', (req, res, next) => {
 /**
  * Login function
  */
-router.post('/authenticate', (req, res, next) => {
+router.post('/authen', (req, res, next) => {
 	const username = req.body.username;
 	const password = req.body.password;
 
@@ -89,7 +89,7 @@ router.post('/authenticate', (req, res, next) => {
  * Type 2 Authenticate
  * Add check login attemps
  */
-router.post('/authen', (req, res, next) => {
+router.post('/authenticate', (req, res, next) => {
 	const username = req.body.username;
 	const password = req.body.password;
 
