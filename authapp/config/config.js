@@ -40,5 +40,5 @@ module.exports = {
 
 	//MALLER_Config
 	MAILLER_CONF_USERNAME: 'adquestasia.kelvin@gmail.com',
-	MAILLER_CONF_PASSWORD: 'Adquest!@#123'
+	MAILLER_CONF_PASSWORD: 'Adquest123!@#'
 }
