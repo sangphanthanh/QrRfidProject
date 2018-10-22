@@ -17,9 +17,33 @@ const DeviceSchema = mongoose.Schema({
     DoorDescription:{type:String, require:false},
     UserID:     [mongoose.Schema.Types.ObjectId],
 });
-/**
- * 
- */
+// /**
+//  * 
+//  */
+
+//  DeviceSchema.static.addDevice = function(newDevice, callback){
+//     newDevice.save(callback);
+// }
+
+// /**
+//  * Get Device By Mac Address
+//  * @param {*} Mac 
+//  * @param {*} callback 
+//  */
+// DeviceSchema.static.getDeviceByMac = function(Mac,callback){
+//     this.findOne({Mac:Mac},callback);
+// }
+
+// /**
+//  * Change Clock Status By Mac Address
+//  * @param {*} Mac 
+//  * @param {*} ClockStatus 
+//  * @param {*} callback 
+//  */
+// DeviceSchema.static.putClockStatusByMac = function(Mac, ClockStatus, callback){
+//     this.findOneAndUpdate({Mac:Mac},{$set:{ClockStatus:ClockStatus}},callback);
+// }
+
 const Device = module.exports = mongoose.model('device',DeviceSchema);
 
 /**
@@ -71,7 +95,6 @@ module.exports.putDoorStatusByMac = function(Mac, DoorStatus, callback){
  */
 module.exports.randomQRCodeByMac = function(Mac, callback){
     var qrgen = Mac + randomString.generate(10);
-    console.log('QR Generation: '+qrgen);
     const query = {Mac:Mac}
     Device.findOneAndUpdate(query,{$set:{QRString:qrgen}},callback);
 }

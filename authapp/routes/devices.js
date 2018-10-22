@@ -288,6 +288,43 @@ router.put('/openclockonuid/:MACAdd', (req, res, next) => {
     });
 });
 
+
+/**
+ * Generator QR String
+ */
+router.post('/generateQRCode', passport.authenticate('jwt', {
+    session: false
+}), (req, res, next) => {
+    var tempUser = req.user;
+    if (tempUser.IsAdmin == true) {
+        var MacAdd = req.body.MacAdd;
+        Device.getDeviceByMac(MacAdd, (err, device) => {
+            if (err) throw err;
+            if (!device) {
+                res.json({
+                    success: false,
+                    msg: config.ST_Code05
+                });
+            } else if (device.IsActive == true) {
+                Device.randomQRCodeByMac(MacAdd, (err, device) => {
+                    if (err) throw err;
+                    if (!device) {
+                        return res.json({
+                            success: false,
+                            msg: config.ST_Code05
+                        })
+                    }else{
+                        return res.json({
+                            success: true,
+                            newQRCode: device.QRString
+                        })
+                    }
+                })
+            }
+        })
+    }
+})
+
 /**
  * Check QR Code from Mobile
  */
@@ -303,7 +340,7 @@ router.post('/CheckQRCode', passport.authenticate('jwt', {
                 success: false,
                 msg: config.ST_Code05
             });
-        } else {
+        } else if (device.IsActive == true) {
             if (device.QRString == qrCheck) {
                 Device.putClockStatusByMac(addMac, true, (err, device) => {
                     if (err) throw err;
@@ -347,6 +384,10 @@ router.post('/CheckQRCode', passport.authenticate('jwt', {
                     msg: config.ER_Code01
                 });
             }
+        } else{
+            res.json({
+                    success: false
+                });
         }
 
     });

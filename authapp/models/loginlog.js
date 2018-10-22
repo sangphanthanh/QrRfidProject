@@ -70,7 +70,10 @@ module.exports.findByServices = function(service,callback){
 //     });
 // }
 
-
+/**
+ * Add fn send mail while login fail many time
+ * @param {*email to login fail} email
+ */
 module.exports.sendMailLoginFail = function(email,callback){
     let transporter = nodemailler.createTransport({
         service: 'Gmail',

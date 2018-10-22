@@ -16,14 +16,16 @@ const UserSchema = mongoose.Schema({
 });
 
 /**
- * 
+ * check user locked or not before access
  */
 UserSchema.virtual('isLocked').get(function() {
     // check for a future lockUntil timestamp
     return !!(this.lockUntil && this.lockUntil > Date.now());
 });
 
-
+/**
+ * Check password compare
+ */
 UserSchema.methods.comparePassword = function(candidatePassword, callback) {
     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
         if (err) return callback(err);
@@ -101,6 +103,99 @@ UserSchema.statics.getAuthenticated = function(username, password, callback) {
     });
 };
 
+// /**
+//  * Get user by id
+//  * @param {*} id 
+//  * @param {*} callback 
+//  */
+// UserSchema.statics.getUserById = function(id,callback){
+//     this.findById(id,callback);
+// }
+
+// /**
+//  * Get user by username 
+//  * @param {*} username 
+//  * @param {*} callback 
+//  */
+// UserSchema.statics.getUserByUsername = function(username,callback){
+//     const query = {username: username}
+//     User.findOne(query,callback);
+// }
+
+// /**
+//  * Add new User 
+//  * @param {*} newUser 
+//  * @param {*} callback 
+//  */
+// UserSchema.statics.addUser = function(newUser, callback){
+//     bcrypt.genSalt(config.SALT_WORK_FACTOR,(err,salt)=>{
+//         bcrypt.hash(newUser.password, salt, (err, hash)=>{
+//             if(err) throw err;
+//             newUser.password = hash;
+//             newUser.save(callback);
+//         })
+//     });
+// }
+
+// /**
+//  * Find user from RFID key
+//  * @param {*} RfidUID 
+//  * @param {*} callback 
+//  */
+// UserSchema.statics.getUserByUID = function(RfidUID,callback){
+//     this.findOne({RfidUID: RfidUID},callback);
+// }
+
+// /**
+//  * find all user 
+//  * @param {*} callback 
+//  */
+// UserSchema.statics.getAll = function(callback){
+//     this.find(callback);
+// }
+
+// /**
+//  * find all user 
+//  * @param {*} callback 
+//  */
+// UserSchema.statics.findall = function(callback){
+//     this.find({},callback);
+// }
+
+// /**
+//  * Update user 
+//  * @param {*} newUser 
+//  * @param {*} callback 
+//  */
+// UserSchema.statics.updateUser = function(newUser,callback){
+//     this.findOneAndUpdate({username:newUser.username},{$set:{IsAdmin:newUser.IsAdmin,RfidUID: newUser.RfidUID}},callback);
+// }
+
+// /**
+//  * Change password 
+//  * @param {*} uname 
+//  * @param {*} passwd 
+//  * @param {*} callback 
+//  */
+// UserSchema.statics.changepasswd = function(uname,passwd,callback){
+//     bcrypt.genSalt(config.roundSalt,(err,salt)=>{
+//         bcrypt.hash(passwd, salt, (err, hash)=>{
+//             if(err) throw err;
+//             passwd = hash;
+//             const query = {username:uname}
+//             this.findOneAndUpdate(query,{$set:{password:passwd, loginAttempts: 0}, $unset: { lockUntil: 1 }},callback);
+//         })
+//     });
+// }
+
+// /**
+//  * Remove User by ID
+//  * @param {*} userId 
+//  * @param {*} callback 
+//  */
+// UserSchema.statics.removeUser = function(userId,callback){
+//     this.findByIdAndRemove(userId,callback);
+// }
 
 const User = module.exports = mongoose.model('User',UserSchema);
 

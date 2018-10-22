@@ -6,8 +6,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 const Device = require('../models/device');
 const loginlog = require('../models/loginlog');
-const nodemailler = require('nodemailer');
-const smtpTransport = require('nodemailer-smtp-transport');
+
 
 /**
  * Register
